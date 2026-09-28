@@ -27,6 +27,12 @@ jobs:
           # macos-latest is Apple Silicon and may lack a 3.9 build; 3.9 stays covered on Ubuntu and Windows.
           - os: macos-latest
             python-version: "3.9"
+          # ubuntu-latest moves to Ubuntu 26 (Oct 2026), which may have no 3.9 build: pin 3.9 to 24.04 instead.
+          - os: ubuntu-latest
+            python-version: "3.9"
+        include:
+          - os: ubuntu-24.04
+            python-version: "3.9"
     env:
       PYTHONUTF8: "1"
       PIP_DISABLE_PIP_VERSION_CHECK: "1"
