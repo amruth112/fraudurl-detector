@@ -76,11 +76,11 @@ Both give identical results. CI checks this on every change, on Linux, macOS and
 
 ```mermaid
 flowchart LR
-    IN(["urls.csv<br/>or --url"]) --> L{"your allow /<br/>block list"}
+    IN(["urls.csv<br/>or --url"]) --> L{"your allow /<br/>block lists"}
     L -- "listed" --> OUT
-    L -- "not listed" --> OFF["<b>Offline check</b><br/>parse like a browser · real owner via Public Suffix List<br/>83 clues → 400-tree model → calibrated probability"]
-    OFF -- "clear" --> OUT(["<b>FRAUD · REVIEW · LEGITIMATE</b><br/>probability + 3 plain-English reasons"])
-    OFF -- "unsure + --enrich-review" --> ENR["<b>Optional lookups</b><br/>DNS + domain registration (age, expiry)<br/>never visits the website"]
+    L -- "not listed" --> OFF["<b>Offline check</b><br/>83 URL clues<br/>400-tree model<br/>calibrated probability"]
+    OFF -- "clear" --> OUT["<b>Verdict</b><br/>FRAUD · REVIEW · LEGITIMATE<br/>+ probability<br/>+ 3 reasons"]
+    OFF -- "unsure" --> ENR["<b>Optional lookups</b><br/>DNS + domain age<br/>never visits the site"]
     ENR --> OUT
 ```
 
