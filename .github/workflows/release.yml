@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Tag must equal v + fraudurl.__version__
+        run: |
+          v="v$(python -c 'import fraudurl; print(fraudurl.__version__)')"
+          test "$v" = "$GITHUB_REF_NAME" || { echo "tag $GITHUB_REF_NAME != $v"; exit 1; }
+
+      - name: Test, then build the wheel, the sdist and the single-file edition
+        run: |
+          python -m pip install build "pytest>=7"
+          python -m pytest -q tests
+          python experiments/check_standalone.py
+          python -m build
+          cp fraudurl_standalone.py dist/
+          cd dist && sha256sum * > SHA256SUMS
+
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create "$GITHUB_REF_NAME" dist/*
+          --title "fraudurl $GITHUB_REF_NAME"
+          --notes "See CHANGELOG.md for what changed. Verify downloads against SHA256SUMS."

@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: py${{ matrix.python-version }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+        exclude:
+          # macos-latest is Apple Silicon and may lack a 3.9 build; 3.9 stays covered on Ubuntu and Windows.
+          - os: macos-latest
+            python-version: "3.9"
+    env:
+      PYTHONUTF8: "1"
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install pytest
+        run: python -m pip install "pytest>=7"
+
+      - name: Test suite (offline; needs only fraudurl/data)
+        run: python -m pytest -q tests
+
+      - name: The committed single-file edition matches the package
+        run: python experiments/check_standalone.py
+
+      - name: Install the package (proves the model files ship in the wheel)
+        run: python -m pip install .
+
+      - name: Smoke test from outside the checkout
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cd "$RUNNER_TEMP"
+          fraudurl --version
+          fraudurl --help > /dev/null
+          fraudurl --url https://example.com/login --quiet
+          fraudurl "$GITHUB_WORKSPACE/examples/sample_urls.csv" -o pkg.csv --quiet
+          python "$GITHUB_WORKSPACE/fraudurl_standalone.py" "$GITHUB_WORKSPACE/examples/sample_urls.csv" -o single.csv --quiet
+          python - "$GITHUB_WORKSPACE/examples/sample_urls.fraudurl.csv" <<'EOF'
+          import filecmp, sys
+          ref = sys.argv[1]
+          for got in ("pkg.csv", "single.csv"):
+              if not filecmp.cmp(got, ref, shallow=False):
+                  sys.exit(got + " differs from " + ref)
+          print("package and single file reproduce examples/sample_urls.fraudurl.csv")
+          EOF
