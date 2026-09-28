@@ -1,0 +1,32 @@
+name: Publish to PyPI
+
+# Run by hand (Actions -> Publish to PyPI -> Run workflow) once the PyPI "trusted publisher" is set up:
+# pypi.org -> Your account -> Publishing -> Add a pending publisher:
+#   project name: fraudurl, owner: amruth112, repository: fraudurl-detector,
+#   workflow: publish-pypi.yml, environment: pypi
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Test, then build the wheel and the sdist
+        run: |
+          python -m pip install build "pytest>=7"
+          python -m pytest -q tests
+          python -m build
+
+      - uses: pypa/gh-action-pypi-publish@release/v1

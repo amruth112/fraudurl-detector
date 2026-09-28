@@ -7,6 +7,7 @@ version: "1.0.0"
 date-released: "2026-09-28"
 license: MIT
 repository-code: "https://github.com/amruth112/fraudurl-detector"
+url: "https://amruth112.github.io/fraudurl-detector/"
 keywords:
   - phishing
   - url

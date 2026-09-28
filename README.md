@@ -5,7 +5,11 @@
   <img alt="fraudurl: fast, offline phishing-URL checker. Example: http://paypal.com.secure-login.test/webscr/login.php?cmd=verify is flagged FRAUD with probability 0.998." src="docs/assets/hero-light.svg" width="100%">
 </picture>
 
-<br>
+<h1>fraudurl: fast, offline phishing URL detector</h1>
+
+<p><b>Check any URL, or a whole CSV of links, for phishing, fraud and scam URLs</b>, with a calibrated probability
+and plain-English reasons. Free, open source, one Python file.<br>
+🌐 <a href="https://amruth112.github.io/fraudurl-detector/"><b>amruth112.github.io/fraudurl-detector</b></a></p>
 
 [![CI](https://github.com/amruth112/fraudurl-detector/actions/workflows/ci.yml/badge.svg)](https://github.com/amruth112/fraudurl-detector/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-2a78d6.svg)](LICENSE)
@@ -329,10 +333,32 @@ It is a fast **first-line filter** for triage, not a replacement for a full phis
 * **Spreadsheet formulas.** Only the eight added columns are protected against formula injection. Your
   original cells are copied unchanged, so open output made from untrusted feeds with formulas disabled.
 
+## FAQ
+
+**How do I check if a URL is phishing?**
+Run `python fraudurl_standalone.py --url "https://example.com/login"`. It prints the verdict, the probability of
+phishing and the reasons, without opening the link.
+
+**How do I check a list of links for scams or fraud?**
+Put the links in a CSV or text file and run `python fraudurl_standalone.py links.csv`. You get the same file back
+with a verdict, probability and reasons on every row.
+
+**Is it safe to check suspicious links with it?**
+Yes. fraudurl reads the address text only. It never opens, downloads or submits anything at the URLs it checks.
+
+**How is it different from Google Safe Browsing or VirusTotal?**
+Those services match URLs against large blocklists run by big providers. fraudurl runs entirely on your
+machine, needs no account, handles millions of URLs from a CSV, explains each verdict, and can flag new phishing
+URLs that no list has seen yet. Use both for the strongest protection.
+
+**Is it free?**
+Yes. It is MIT-licensed, with no API keys, accounts or paid services.
+
 ## Documentation
 
 | | |
 |---|---|
+| [Website](https://amruth112.github.io/fraudurl-detector/) | project page: overview, examples and FAQ |
 | [HOW_IT_WORKS.md](HOW_IT_WORKS.md) | plain-English guide: what you get, what to do with it, every step explained |
 | [REPORT.md](REPORT.md) | the engineering report: data, experiments, what worked and what did not, all measurements |
 | [MODEL_CARD.md](MODEL_CARD.md) | intended use, training data, evaluation, limitations |

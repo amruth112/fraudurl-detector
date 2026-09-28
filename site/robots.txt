@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://amruth112.github.io/fraudurl-detector/sitemap.xml

@@ -43,3 +43,6 @@ desktop.ini
 .idea/
 .vscode/
 *.swp
+
+# ---- local tool settings
+/.claude/

@@ -298,6 +298,9 @@ def main():
     s = {"time_1m": f"{int(secs // 60)} min {int(round(secs % 60))} s", "size": f"{round(size_kb, -1):.0f} KB",
          "auc": f"{min(aucs):.2f}–{max(aucs):.2f}"}
     fraud_row = next(r for r in rows if r["fraud_verdict"] == "FRAUD")
+    fav = svg(104, 104, defs(THEMES["dark"]) + logo(0, 0, 104, THEMES["dark"]), "fraudurl")
+    with open(os.path.join(OUT, "favicon.svg"), "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(fav)
     for mode, t in THEMES.items():
         for name, content in (("hero", hero(t, fraud_row)), ("demo", demo(t, rows, summary)),
                               ("stats", stats(t, s)), ("verdicts", verdicts(t, groups))):
