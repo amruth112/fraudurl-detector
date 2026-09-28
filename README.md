@@ -75,7 +75,7 @@ Both give identical results. CI checks this on every change, on Linux, macOS and
 ## How it works
 
 ```mermaid
-flowchart LR
+flowchart TD
     IN(["urls.csv<br/>or --url"]) --> L{"your allow /<br/>block lists"}
     L -- "listed" --> OUT
     L -- "not listed" --> OFF["<b>Offline check</b><br/>83 URL clues<br/>400-tree model<br/>calibrated probability"]
