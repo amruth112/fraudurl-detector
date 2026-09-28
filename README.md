@@ -7,9 +7,9 @@
 
 <h1>fraudurl: fast, offline phishing URL detector</h1>
 
-<p><b>Check any URL, or a whole CSV of links, for phishing, fraud and scam URLs</b>, with a calibrated probability
-and plain-English reasons. Free, open source, one Python file.<br>
-🌐 <a href="https://amruth112.github.io/fraudurl-detector/"><b>amruth112.github.io/fraudurl-detector</b></a></p>
+<p><b>A phishing URL checker for Python: check any URL, or a whole CSV of links, for phishing</b>, with a calibrated
+probability and plain-English reasons. Free, open source, one Python file.<br>
+Website: <a href="https://amruth112.github.io/fraudurl-detector/"><b>amruth112.github.io/fraudurl-detector</b></a></p>
 
 [![CI](https://github.com/amruth112/fraudurl-detector/actions/workflows/ci.yml/badge.svg)](https://github.com/amruth112/fraudurl-detector/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-2a78d6.svg)](LICENSE)
@@ -28,7 +28,7 @@ and plain-English reasons. Free, open source, one Python file.<br>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/stats-dark.svg">
-  <img alt="6 min 20 s to check 1,000,000 URLs on a 4-core desktop; 450 KB for the whole tool in one file, models included; 0 dependencies; ROC-AUC 0.96–0.98 on domains never seen in training." src="docs/assets/stats-light.svg" width="100%">
+  <img alt="6 min 20 s to check 1,000,000 URLs on a 4-core desktop; 450 KB for the whole tool in one file, models included; 0 dependencies; ROC-AUC 0.91–0.98 on domains never seen in training (four test sets, 2020–2026)." src="docs/assets/stats-light.svg" width="100%">
 </picture>
 
 ## What it does
@@ -48,7 +48,8 @@ free-hosting addresses, risky domain endings, `http://` and random-looking names
 
 - **One file, no dependencies.** The whole tool, models included, is one ~450 KB Python file that runs on the
   Python 3.9+ standard library.
-- **Fast.** It checks about 1,000 URLs a second per CPU core, with flat memory (about 230 MB on 4 cores).
+- **Fast.** It checks about 1,000 URLs a second on one CPU core and 2,600–3,200 a second on four, with flat memory
+  (about 230 MB on 4 cores).
 - **Explains itself.** The reasons are the model's own per-feature contributions, not a separate heuristic.
 - **Says when it is unsure.** Ambiguous URLs go to `REVIEW` for a person instead of being guessed.
 - **Private by default.** Offline mode never touches the network. The optional lookups ask DNS and the domain
@@ -104,15 +105,15 @@ The step-by-step version, with a worked example, is in [HOW_IT_WORKS.md](HOW_IT_
 
 ## How accurate is it?
 
-Every number here is measured on test URLs from **domains the model never saw in training**, across four
-independently collected datasets from 2020 to 2026.
+Every number here is measured on URLs from **domains the model never saw in training**: held-out test splits of
+its three training datasets, plus one dataset (Ariyadasa 2021) never used for training at all, 2020 to 2026.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/verdicts-dark.svg">
   <img alt="Stacked bars: for each dataset, the share of legitimate and phishing URLs that end up LEGITIMATE, REVIEW or FRAUD. Legitimate URLs wrongly called FRAUD: 0.3% (PhreshPhish), 1.8% (2026), 1.8% (Ariyadasa), 1.3% (Hannousse). Phishing wrongly called LEGITIMATE: 2.6%, 1.6%, 2.1%, 4.9%." src="docs/assets/verdicts-light.svg" width="100%">
 </picture>
 
-| Test data | ROC-AUC | Caught at 1% false alarms | Legitimate called FRAUD | Phishing called LEGITIMATE | Sent to REVIEW |
+| Test data | ROC-AUC | Caught when 1% of legitimate URLs are flagged | Legitimate called FRAUD | Phishing called LEGITIMATE | Sent to REVIEW |
 |---|---|---|---|---|---|
 | PhreshPhish 2024–25 | 0.984 | 85% | 0.3% | 2.6% | 18% |
 | 2026 collection | 0.975 | 73% | 1.8% | 1.6% | 24% |
@@ -124,6 +125,7 @@ independently collected datasets from 2020 to 2026.
 * **Weaker on unfamiliar data:** older or very different data is harder.
 * **Low-prevalence traffic:** when phishing is rare in your traffic, many FRAUD rows will be false alarms, so
   use `--base-rate`.
+* **Slightly optimistic:** the final set-up was chosen partly by looking at these test results.
 * **More detail:** [MODEL_CARD.md](MODEL_CARD.md) and the full [engineering report](REPORT.md), which
   includes a comparison with the Laya language model, 94–583× slower per URL here.
 
@@ -335,21 +337,27 @@ It is a fast **first-line filter** for triage, not a replacement for a full phis
 
 ## FAQ
 
-**How do I check if a URL is phishing?**
+**How do I check if a link is phishing?**
 Run `python fraudurl_standalone.py --url "https://example.com/login"`. It prints the verdict, the probability of
 phishing and the reasons, without opening the link.
 
-**How do I check a list of links for scams or fraud?**
+**How do I check a list of links for phishing?**
 Put the links in a CSV or text file and run `python fraudurl_standalone.py links.csv`. You get the same file back
 with a verdict, probability and reasons on every row.
 
+**Does it detect malware or other scam links?**
+It is built and tested for phishing URLs: fake login, payment and account pages. It has not been measured on
+malware downloads or other kinds of malicious or scam URLs, so use a malware scanner or blocklist for those too.
+
 **Is it safe to check suspicious links with it?**
 Yes. fraudurl reads the address text only. It never opens, downloads or submits anything at the URLs it checks.
+In offline mode nothing is sent anywhere; with the optional lookups, the host name goes to Cloudflare's DNS.
 
 **How is it different from Google Safe Browsing or VirusTotal?**
-Those services match URLs against large blocklists run by big providers. fraudurl runs entirely on your
-machine, needs no account, handles millions of URLs from a CSV, explains each verdict, and can flag new phishing
-URLs that no list has seen yet. Use both for the strongest protection.
+Those are online services that check URLs against threat lists and, for VirusTotal, many vendors' verdicts,
+backed by far more data than any local model. fraudurl runs entirely on your machine, needs no account, checks a
+million-URL CSV in minutes and explains each verdict. Because it judges the address itself, it can also give a
+verdict on a URL that is not on any list yet. It has not been compared with those services; use them together.
 
 **Is it free?**
 Yes. It is MIT-licensed, with no API keys, accounts or paid services.
@@ -359,6 +367,7 @@ Yes. It is MIT-licensed, with no API keys, accounts or paid services.
 | | |
 |---|---|
 | [Website](https://amruth112.github.io/fraudurl-detector/) | project page: overview, examples and FAQ |
+| [Guide: check a list of URLs for phishing](https://amruth112.github.io/fraudurl-detector/check-urls-for-phishing/) | step by step, with real output: run it, read the verdicts, `--base-rate`, lists, Python |
 | [HOW_IT_WORKS.md](HOW_IT_WORKS.md) | plain-English guide: what you get, what to do with it, every step explained |
 | [REPORT.md](REPORT.md) | the engineering report: data, experiments, what worked and what did not, all measurements |
 | [MODEL_CARD.md](MODEL_CARD.md) | intended use, training data, evaluation, limitations |

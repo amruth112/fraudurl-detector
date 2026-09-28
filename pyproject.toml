@@ -11,7 +11,7 @@ requires-python = ">=3.9"
 license = "MIT AND MPL-2.0"            # MIT for fraudurl; MPL-2.0 for the bundled Public Suffix List
 license-files = ["LICENSE", "NOTICE.md", "LICENSES/*"]
 authors = [{ name = "Amruthjithraj V.R" }]
-keywords = ["phishing", "url", "fraud", "security", "classifier", "lightgbm", "offline", "csv", "threat-detection"]
+keywords = ["fraudurl", "phishing", "phishing-detection", "phishing-url", "url-checker", "url", "security", "classifier", "lightgbm", "offline", "csv", "cli"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",

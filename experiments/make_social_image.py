@@ -1,6 +1,7 @@
-"""Draw the 1280x640 social-preview / Open Graph image (docs/assets/social-preview.png).
+"""Draw the 1280x640 social-preview / Open Graph image (docs/assets/social-preview.png) and the PNG favicons.
 
-Used as the GitHub social preview and as og:image on the project website. Needs Pillow; uses Segoe UI when
+The image is the GitHub social preview and the og:image of the project website; favicon-48.png and
+apple-touch-icon.png (180x180) are fallbacks for browsers and devices that do not use favicon.svg. Needs Pillow; uses Segoe UI when
 present (Windows), else DejaVu Sans, else Pillow's default font.
 
     python experiments/make_social_image.py
@@ -92,7 +93,7 @@ def main():
     img.alpha_composite(logo(132), (96 * S, 118 * S))
     d.text((260 * S, 124 * S), "fraudurl", font=font(True, 118), fill=(240, 246, 252))
     d.text((98 * S, 300 * S), "Fast, offline phishing URL detector", font=font(True, 50), fill=(240, 246, 252))
-    d.text((98 * S, 378 * S), "Check any URL or CSV list for phishing, fraud and scam links.", font=font(False, 30),
+    d.text((98 * S, 378 * S), "Check one URL or a whole CSV list for phishing links, offline.", font=font(False, 30),
            fill=(145, 152, 161))
     d.text((98 * S, 420 * S), "One Python file  ·  zero dependencies  ·  plain-English reasons", font=font(False, 30),
            fill=(145, 152, 161))
@@ -106,6 +107,16 @@ def main():
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     img.save(OUT, optimize=True)
     print("wrote", OUT, os.path.getsize(OUT), "bytes")
+    for name, px in (("favicon-48.png", 48), ("apple-touch-icon.png", 180)):
+        path = os.path.join(os.path.dirname(OUT), name)
+        icon = logo(px).resize((px, px), Image.LANCZOS)
+        if name.startswith("apple"):  # iOS rounds the corners itself: fill the square edge to edge
+            big = logo(px * 9 // 8)
+            k = (big.width - px * S) // 2
+            icon = big.crop((k, k, k + px * S, k + px * S)).resize((px, px), Image.LANCZOS)
+            icon = Image.alpha_composite(Image.new("RGBA", (px, px), (57, 135, 229, 255)), icon).convert("RGB")
+        icon.save(path, optimize=True)
+        print("wrote", path, os.path.getsize(path), "bytes")
 
 
 if __name__ == "__main__":

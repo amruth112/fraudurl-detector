@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Check a list of URLs for phishing (CSV, offline) | fraudurl</title>
+<meta name="description" content="Step by step: check a CSV or text file of links for phishing with fraudurl, a free offline Python tool. Read the verdicts, tune for rare phishing, add lists.">
+<link rel="canonical" href="https://amruth112.github.io/fraudurl-detector/check-urls-for-phishing/">
+<meta name="theme-color" content="#2a78d6">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="fraudurl">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="How to check a list of URLs for phishing (CSV, offline)">
+<meta property="og:description" content="Check a whole CSV of links for phishing with one command, offline, and read the verdicts.">
+<meta property="og:url" content="https://amruth112.github.io/fraudurl-detector/check-urls-for-phishing/">
+<meta property="og:image" content="https://amruth112.github.io/fraudurl-detector/assets/social-preview.png">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="640">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How to check a list of URLs for phishing (CSV, offline)">
+<meta name="twitter:description" content="Check a whole CSV of links for phishing with one command, offline, and read the verdicts.">
+<meta name="twitter:image" content="https://amruth112.github.io/fraudurl-detector/assets/social-preview.png">
+<meta name="twitter:image:alt" content="fraudurl: fast, offline phishing URL detector">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": "https://amruth112.github.io/fraudurl-detector/check-urls-for-phishing/#article",
+      "headline": "How to check a list of URLs for phishing",
+      "description": "Step by step: check a CSV or text file of links for phishing with fraudurl, a free offline Python tool.",
+      "inLanguage": "en",
+      "datePublished": "2026-09-28",
+      "dateModified": "2026-09-28",
+      "image": "https://amruth112.github.io/fraudurl-detector/assets/social-preview.png",
+      "author": {"@type": "Person", "name": "Amruthjithraj V.R", "url": "https://github.com/amruth112"},
+      "about": {"@id": "https://amruth112.github.io/fraudurl-detector/#app"},
+      "mainEntityOfPage": "https://amruth112.github.io/fraudurl-detector/check-urls-for-phishing/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "fraudurl", "item": "https://amruth112.github.io/fraudurl-detector/"},
+        {"@type": "ListItem", "position": 2, "name": "Check a list of URLs for phishing", "item": "https://amruth112.github.io/fraudurl-detector/check-urls-for-phishing/"}
+      ]
+    }
+  ]
+}
+</script>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../"><img src="../assets/favicon.svg" alt="" width="30" height="30">fraudurl</a>
+    <nav>
+      <a class="opt" href="../#how">How it works</a>
+      <a class="opt" href="../#accuracy">Accuracy</a>
+      <a class="opt" href="../#faq">FAQ</a>
+      <a href="https://github.com/amruth112/fraudurl-detector">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap doc">
+  <p class="crumbs"><a href="../">fraudurl</a> › Guide</p>
+  <h1>How to check a list of URLs for phishing</h1>
+  <p class="lead">This guide shows how to check a whole CSV or text file of links for phishing on your own computer
+    with <a href="../">fraudurl</a>, a free, open-source phishing URL checker for Python. It takes one command, needs
+    no account or API key, and never opens the links.</p>
+
+  <h2>What you need</h2>
+  <ul>
+    <li>Python 3.9 or later, on Windows, macOS or Linux. Nothing else to install.</li>
+    <li>The tool: <a href="https://github.com/amruth112/fraudurl-detector/releases/latest/download/fraudurl_standalone.py">fraudurl_standalone.py</a>
+      (one 450 KB file, models included). Or install the package with
+      <code>pip install git+https://github.com/amruth112/fraudurl-detector</code> and use the <code>fraudurl</code> command.</li>
+    <li>Your links, in a CSV file (any column layout) or a plain text file with one link per line.</li>
+  </ul>
+
+  <h2>Step 1: put the links in a file</h2>
+  <p>A spreadsheet exported as CSV works as it is. fraudurl finds the column that holds the URLs by itself; if it
+    picks the wrong one, name it with <code>--url-column "Website"</code>. Every other column is kept in the output.
+    Links without <code>http://</code> or <code>https://</code>, such as <code>github.com/python/cpython</code>, are fine.</p>
+<pre><code>url
+http://paypal.com.secure-login.test/webscr/login.php?cmd=verify
+https://www.wikipedia.org/
+github.com/python/cpython</code></pre>
+
+  <h2>Step 2: run one command</h2>
+<pre><code>python fraudurl_standalone.py links.csv</code></pre>
+  <p>This writes <code>links.fraudurl.csv</code> next to your file (choose another name with <code>-o</code>) and
+    prints a summary such as <code>Verdicts: FRAUD=1, LEGITIMATE=2</code>. Nothing is sent over the network.</p>
+
+  <h2>Step 3: read the results</h2>
+  <p>This is the real output for the three links above:</p>
+  <div class="table-scroll"><table>
+    <thead><tr><th>url</th><th>fraud_verdict</th><th>fraud_probability</th><th>top_reasons</th></tr></thead>
+    <tbody>
+      <tr><td>http://paypal.com.secure-login.test/webscr/login.php?cmd=verify</td><td>FRAUD</td><td>0.998</td>
+        <td>well-known brand name in the subdomain (impersonation pattern) (raises risk); uses unencrypted http://
+          (raises risk); 4 login/payment words in the path (raises risk)</td></tr>
+      <tr><td>https://www.wikipedia.org/</td><td>LEGITIMATE</td><td>0.036</td>
+        <td>domain ending '.org' (8% of training URLs with it were phishing) (lowers risk); has a 'www.' prefix
+          (lowers risk); subdomain is 3 characters long (lowers risk)</td></tr>
+      <tr><td>github.com/python/cpython</td><td>LEGITIMATE</td><td>0.079</td>
+        <td>domain ending '.com' (23% of training URLs with it were phishing) (lowers risk); uses https:// (or no
+          scheme given) (lowers risk); 4 slashes (lowers risk)</td></tr>
+    </tbody>
+  </table></div>
+  <p>The columns fraudurl adds:</p>
+  <ul>
+    <li><b>fraud_verdict</b>: <code>FRAUD</code>, <code>LEGITIMATE</code>, <code>REVIEW</code> (the address alone
+      is not conclusive) or <code>ERROR</code> (not a usable URL; the <b>error</b> column says why).</li>
+    <li><b>fraud_probability</b>: the calibrated probability that the link is phishing.</li>
+    <li><b>verdict_confidence</b>: how sure the verdict is, from 0.5 to 1.</li>
+    <li><b>top_reasons</b>: up to three plain-English reasons, taken from the model's own per-clue contributions.</li>
+    <li><b>registrable_domain</b>: the domain someone actually registered, such as <code>secure-login.test</code>
+      in the first row, not <code>paypal.com</code>.</li>
+    <li><b>analysis_mode</b> and <b>lookup_status</b>: which checks produced the verdict.</li>
+  </ul>
+
+  <h2>What to do with each verdict</h2>
+  <ul>
+    <li><b>FRAUD</b>: the address looks like phishing. If phishing is rare in your data, have a person confirm before
+      blocking anything (see the next step).</li>
+    <li><b>REVIEW</b>: the address alone is not enough. Look at these by hand, or let the optional lookups below
+      decide more of them.</li>
+    <li><b>LEGITIMATE</b>: nothing in the address looks like phishing. It is not a malware or scam check.</li>
+  </ul>
+  <p>Sort the output by <code>fraud_probability</code> in Excel or any spreadsheet to work from the most suspicious
+    link down.</p>
+
+  <h2>If phishing is rare in your list, say so</h2>
+  <p>The probabilities are calibrated on data where about 47% of URLs were phishing. In everyday traffic phishing is
+    usually far rarer, and then many FRAUD verdicts are false alarms. Tell fraudurl the share you expect:</p>
+<pre><code>python fraudurl_standalone.py links.csv --base-rate 0.01</code></pre>
+  <p>The probabilities are re-weighted to that rate, and a FRAUD row whose re-weighted probability drops below 0.5
+    becomes REVIEW. With <code>--base-rate 0.01</code>, the PayPal look-alike above still comes out FRAUD, at 0.877.</p>
+
+  <h2>Look closer at the unsure links (optional)</h2>
+<pre><code>python fraudurl_standalone.py links.csv --enrich-review</code></pre>
+  <p>For links the offline check leaves in REVIEW, this looks up the domain's DNS records (through Cloudflare's DNS
+    service) and its registration date (from the domain registry), and a second model uses them to settle the
+    verdict. It never visits the website. The lookups are cached per domain and politely rate-limited, so this mode
+    is much slower than the offline check. <code>--enrich</code> does the same for every link.</p>
+
+  <h2>Add your own allow and block lists (optional)</h2>
+  <p>Lists always win over the model. Put one domain, host, IP address or URL prefix per line; lines starting with
+    <code>#</code> are comments, and hosts-file lines such as <code>0.0.0.0 bad.example</code> are understood. A domain
+    also covers its subdomains.</p>
+<pre><code>python fraudurl_standalone.py links.csv --allow-list partners.txt --block-list known_bad.txt</code></pre>
+  <p>A listed row says so in <code>top_reasons</code>, for example <code>on your block list (entry
+    'example-bad.test')</code>, followed by what the model alone would have said. The block list wins if a link is on both.</p>
+
+  <h2>Check a single link</h2>
+<pre><code>python fraudurl_standalone.py --url "http://paypal.com.secure-login.test/webscr/login.php" --quiet</code></pre>
+  <p>The result is one JSON object: the verdict, probability, reasons and the stages that produced it. Repeat
+    <code>--url</code> to check several links; add <code>--format json</code> to get JSON Lines for a whole file.</p>
+
+  <h2>Use it from a Python script</h2>
+  <p>Version 1.0 is a command-line tool with no import-level API, so call it with <code>subprocess</code>:</p>
+<pre><code>import json, subprocess, sys
+
+url = "http://paypal.com.secure-login.test/webscr/login.php"
+out = subprocess.run([sys.executable, "fraudurl_standalone.py", "--url", url, "--quiet"],
+                     capture_output=True, text=True, check=True).stdout
+result = json.loads(out)
+print(result["fraud_verdict"], result["fraud_probability"], result["top_reasons"][0])
+# FRAUD 0.998 well-known brand name in the subdomain (impersonation pattern) (raises risk)</code></pre>
+
+  <h2>Large lists</h2>
+  <p>fraudurl streams the file, so memory stays flat. It checks about 1,000 URLs a second on one CPU core and
+    2,600–3,200 a second on four; a million URLs took 6 minutes 20 seconds on a 4-core desktop, using about 230 MB.
+    It uses up to 4 worker processes by default; change that with <code>--workers</code>.</p>
+
+  <p class="note">fraudurl is built and tested for phishing URLs. How accurate it is, and where it is weaker, is on
+    the <a href="../#accuracy">home page</a> and in the
+    <a href="https://github.com/amruth112/fraudurl-detector/blob/main/MODEL_CARD.md">model card</a>.</p>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>fraudurl · MIT License · <a href="https://github.com/amruth112/fraudurl-detector/blob/main/NOTICE.md">credits</a></span>
+    <span><a href="https://github.com/amruth112/fraudurl-detector">github.com/amruth112/fraudurl-detector</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

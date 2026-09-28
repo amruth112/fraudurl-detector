@@ -214,7 +214,7 @@ def stats(t, s):
     tiles = [(s["time_1m"], "to check 1,000,000 URLs", "on a 4-core desktop"),
              (s["size"], "the whole tool in one file,", "models included"),
              ("0", "dependencies: Python 3.9+", "standard library only"),
-             (s["auc"], "ROC-AUC on domains never", "seen in training (2021–2026)")]
+             (s["auc"], "ROC-AUC on domains never", "seen in training (2020–2026)")]
     tw, gap = (W - 3 * 16) / 4, 16
     b = []
     for i, (big, l1, l2) in enumerate(tiles):
@@ -293,7 +293,7 @@ def main():
     secs = scale["seconds"]
     fs = J("final", "final_safe.json")
     aucs = [fs["test"]["phreshphish"]["metrics_at_0.5"]["roc_auc"], fs["test"]["fresh26"]["metrics_at_0.5"]["roc_auc"],
-            fs["external"]["ariyadasa"]["metrics_at_0.5"]["roc_auc"]]
+            fs["external"]["ariyadasa"]["metrics_at_0.5"]["roc_auc"], fs["test"]["hannousse"]["metrics_at_0.5"]["roc_auc"]]
     size_kb = os.path.getsize(os.path.join(ROOT, "fraudurl_standalone.py")) / 1000
     s = {"time_1m": f"{int(secs // 60)} min {int(round(secs % 60))} s", "size": f"{round(size_kb, -1):.0f} KB",
          "auc": f"{min(aucs):.2f}–{max(aucs):.2f}"}

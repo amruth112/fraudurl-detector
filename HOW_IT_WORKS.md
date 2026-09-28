@@ -1,7 +1,7 @@
 # fraudurl: what it does and how it works
 
 > **In one sentence:** a single 450 KB Python file that reads a spreadsheet of links and flags
-> phishing offline, at about 1,000 URLs a second per CPU core, with a plain-English reason for every
+> phishing offline, at about 1,000 URLs a second on one CPU core, with a plain-English reason for every
 > call.
 
 ## The short version
@@ -53,7 +53,7 @@ python fraudurl_standalone.py --url https://example.com/login --enrich-review   
   Done: 5 URLs in 0.1s -> my_urls.fraudurl.csv
   Verdicts: ERROR=1, FRAUD=2, LEGITIMATE=2
   ```
-* **How long it takes:** about 1,000 URLs a second per CPU core, and about 2,600–3,200 a second on
+* **How long it takes:** about 1,000 URLs a second on one CPU core, and about 2,600–3,200 a second on
   4 cores. A few thousand URLs take seconds, and a million take about 6 minutes. The lookups are much
   slower; see "Under the hood".
 * **If it complains:** "input file not found" means the file name or folder is wrong.
