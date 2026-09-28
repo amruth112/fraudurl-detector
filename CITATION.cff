@@ -1,0 +1,55 @@
+cff-version: 1.2.0
+message: "If you use fraudurl in your work, please cite it as below, and cite the datasets listed in NOTICE.md."
+title: "fraudurl: a fast, offline phishing-URL checker"
+authors:
+  - name: "Amruthjithraj V.R"
+version: "1.0.0"
+date-released: "2026-09-28"
+license: MIT
+repository-code: "https://github.com/amruth112/fraudurl-detector"
+keywords:
+  - phishing
+  - url
+  - security
+  - machine-learning
+references:
+  - type: data
+    title: "PhreshPhish: A Real-World, High-Quality, Large-Scale Phishing Website Dataset and Benchmark"
+    authors:
+      - family-names: Dalton
+        given-names: T.
+      - family-names: Gowda
+        given-names: H.
+      - family-names: Rao
+        given-names: G.
+      - family-names: Pargi
+        given-names: S.
+      - family-names: Hadj Khodabakhshi
+        given-names: A.
+      - family-names: Rombs
+        given-names: J.
+      - family-names: Jou
+        given-names: S.
+      - family-names: Marwah
+        given-names: M.
+    identifiers:
+      - type: other
+        value: "arXiv:2507.10854"
+  - type: data
+    title: "Web page phishing detection"
+    authors:
+      - family-names: Hannousse
+        given-names: A.
+      - family-names: Yahiouche
+        given-names: S.
+    doi: "10.17632/c2gw7fy2j4.3"
+  - type: data
+    title: "Phishing Websites Dataset"
+    authors:
+      - family-names: Ariyadasa
+        given-names: S.
+      - family-names: Fernando
+        given-names: S.
+      - family-names: Fernando
+        given-names: S.
+    doi: "10.17632/n96ncsr5g4.1"

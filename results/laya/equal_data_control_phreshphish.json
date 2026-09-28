@@ -1,0 +1,26 @@
+{
+  "laya_embedding_LR": {
+    "roc_auc": 0.9677,
+    "pr_auc": 0.9648,
+    "recall_at_fpr_1pct": 0.6208,
+    "recall_at_fpr_0_1pct": 0.4392
+  },
+  "lightgbm_lexical_same_6k": {
+    "roc_auc": 0.9876,
+    "pr_auc": 0.9877,
+    "recall_at_fpr_1pct": 0.8755,
+    "recall_at_fpr_0_1pct": 0.552
+  },
+  "char_ngram_LR_same_6k": {
+    "roc_auc": 0.9812,
+    "pr_auc": 0.9809,
+    "recall_at_fpr_1pct": 0.8302,
+    "recall_at_fpr_0_1pct": 0.4832
+  },
+  "laya_embedding+lexical_LR_same_6k": {
+    "roc_auc": 0.9866,
+    "pr_auc": 0.9874,
+    "recall_at_fpr_1pct": 0.8682,
+    "recall_at_fpr_0_1pct": 0.7994
+  }
+}

@@ -1,0 +1,41 @@
+name: Wrong verdict
+description: A phishing URL was not flagged, or a legitimate URL was flagged.
+labels: ["wrong-verdict"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Defang the URL** before pasting it (`hxxps://evil[.]example/login`). Remove any e-mail address,
+        token or personal data from it. Never paste a live phishing link.
+  - type: input
+    id: url
+    attributes:
+      label: Defanged URL
+      placeholder: hxxps://login-verify[.]example/account
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Output
+      description: "The output of `fraudurl --url '<the URL>' --quiet` (with defanged URLs inside it)."
+      render: json
+    validations:
+      required: true
+  - type: dropdown
+    id: expected
+    attributes:
+      label: What should the verdict be?
+      options: [FRAUD, LEGITIMATE, REVIEW is fine but the reasons are wrong]
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: How do you know? (e.g. listed on a public feed on a given date, confirmed by the owner)
+  - type: input
+    id: version
+    attributes:
+      label: fraudurl version
+      placeholder: "fraudurl --version"

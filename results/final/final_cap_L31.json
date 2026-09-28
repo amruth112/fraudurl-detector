@@ -1,0 +1,226 @@
+{
+  "meta": {
+    "version": 1,
+    "tag": "cap_L31",
+    "trained_on": {
+      "phreshphish": 0.55,
+      "fresh26": 0.35,
+      "hannousse": 0.1
+    },
+    "n_train": 316682,
+    "n_trees": 1156,
+    "leaves": 31,
+    "calibration": "isotonic",
+    "calibration_cv_logloss": {
+      "platt": 0.13225955808161965,
+      "isotonic": 0.13214644600243602
+    },
+    "calibration_base_rate": 0.46304638757468947,
+    "threshold_targets": {
+      "fpr": 0.01,
+      "fnr": 0.02
+    },
+    "created": "2026-09-25"
+  },
+  "model_file": "fraudurl/data/model_cap_L31.json",
+  "model_bytes": 2447217,
+  "train_seconds": 59.74587559700012,
+  "pure_python_max_abs_diff": [
+    3.019806626980426e-14,
+    2.1316282072803006e-14
+  ],
+  "end_to_end_max_abs_prob_diff": 2.3925306180672123e-14,
+  "thresholds": {
+    "fraud": 0.8345323751007194,
+    "legit": 0.10460250946025104
+  },
+  "test": {
+    "phreshphish": {
+      "metrics_at_0.5": {
+        "n": 99169,
+        "n_pos": 45177,
+        "n_neg": 53992,
+        "threshold": 0.5,
+        "tp": 41937,
+        "fp": 1432,
+        "tn": 52560,
+        "fn": 3240,
+        "precision": 0.966981023311582,
+        "recall": 0.9282820904442526,
+        "f1": 0.9472364646624354,
+        "fpr": 0.026522447770040005,
+        "fnr": 0.07171790955574739,
+        "accuracy": 0.9528885034637841,
+        "roc_auc": 0.9871896651524663,
+        "pr_auc": 0.9870024838378254,
+        "brier": 0.036614764241500806,
+        "log_loss": 0.13177584057171196,
+        "ece": 0.004029592693086549,
+        "recall_at_fpr_1pct": 0.8768842552626337,
+        "recall_at_fpr_0_1pct": 0.7338247338247338
+      },
+      "three_way": {
+        "FRAUD": {
+          "n": 39819,
+          "share": 0.40152668676703407,
+          "phishing_share_within": 0.9884728395991863
+        },
+        "LEGITIMATE": {
+          "n": 46175,
+          "share": 0.46561929635269084,
+          "phishing_share_within": 0.021418516513264752
+        },
+        "REVIEW": {
+          "n": 13175,
+          "share": 0.1328540168802751,
+          "phishing_share_within": 0.3664516129032258
+        },
+        "legit_flagged_FRAUD_rate": 0.00850125944584383,
+        "phish_called_LEGITIMATE_rate": 0.02189167054031919
+      }
+    },
+    "fresh26": {
+      "metrics_at_0.5": {
+        "n": 4718,
+        "n_pos": 2363,
+        "n_neg": 2355,
+        "threshold": 0.5,
+        "tp": 2206,
+        "fp": 263,
+        "tn": 2092,
+        "fn": 157,
+        "precision": 0.8934791413527744,
+        "recall": 0.9335590351248413,
+        "f1": 0.9130794701986755,
+        "fpr": 0.11167728237791932,
+        "fnr": 0.0664409648751587,
+        "accuracy": 0.9109792284866469,
+        "roc_auc": 0.9747981307722648,
+        "pr_auc": 0.9749594461380212,
+        "brier": 0.06855533326250653,
+        "log_loss": 0.23028893047113236,
+        "ece": 0.04490343774183019,
+        "recall_at_fpr_1pct": 0.7160389335590351,
+        "recall_at_fpr_0_1pct": 0.46550994498518833
+      },
+      "three_way": {
+        "FRAUD": {
+          "n": 2206,
+          "share": 0.4675710046629928,
+          "phishing_share_within": 0.9437896645512239
+        },
+        "LEGITIMATE": {
+          "n": 1632,
+          "share": 0.34590928359474354,
+          "phishing_share_within": 0.018995098039215685
+        },
+        "REVIEW": {
+          "n": 880,
+          "share": 0.18651971174226367,
+          "phishing_share_within": 0.2840909090909091
+        },
+        "legit_flagged_FRAUD_rate": 0.052653927813163484,
+        "phish_called_LEGITIMATE_rate": 0.013118916631400761
+      }
+    },
+    "hannousse": {
+      "metrics_at_0.5": {
+        "n": 2369,
+        "n_pos": 1235,
+        "n_neg": 1134,
+        "threshold": 0.5,
+        "tp": 1051,
+        "fp": 169,
+        "tn": 965,
+        "fn": 184,
+        "precision": 0.8614754098360655,
+        "recall": 0.8510121457489879,
+        "f1": 0.8562118126272913,
+        "fpr": 0.1490299823633157,
+        "fnr": 0.14898785425101216,
+        "accuracy": 0.8509919797382862,
+        "roc_auc": 0.9139626130854202,
+        "pr_auc": 0.9300625071906634,
+        "brier": 0.11567355565674296,
+        "log_loss": 0.4011145963760188,
+        "ece": 0.05930396521195579,
+        "recall_at_fpr_1pct": 0.4874493927125506,
+        "recall_at_fpr_0_1pct": 0.1708502024291498
+      },
+      "three_way": {
+        "FRAUD": {
+          "n": 957,
+          "share": 0.40396791895314477,
+          "phishing_share_within": 0.9258098223615465
+        },
+        "LEGITIMATE": {
+          "n": 661,
+          "share": 0.27902068383284084,
+          "phishing_share_within": 0.09682299546142209
+        },
+        "REVIEW": {
+          "n": 751,
+          "share": 0.31701139721401433,
+          "phishing_share_within": 0.3794940079893475
+        },
+        "legit_flagged_FRAUD_rate": 0.06261022927689594,
+        "phish_called_LEGITIMATE_rate": 0.051821862348178135
+      }
+    }
+  },
+  "external": {
+    "ariyadasa": {
+      "n": 79537,
+      "n_unseen_domains": 54613,
+      "FRAUD_share": 0.408419240840093,
+      "LEGITIMATE_share": 0.33958947503341697,
+      "REVIEW_share": 0.25199128412648997,
+      "metrics_at_0.5": {
+        "n": 54613,
+        "n_pos": 26743,
+        "n_neg": 27870,
+        "threshold": 0.5,
+        "tp": 23699,
+        "fp": 2800,
+        "tn": 25070,
+        "fn": 3044,
+        "precision": 0.8943356353069927,
+        "recall": 0.8861758217103541,
+        "f1": 0.8902370309154427,
+        "fpr": 0.1004664513814137,
+        "fnr": 0.11382417828964589,
+        "accuracy": 0.8929925109406185,
+        "roc_auc": 0.9578641230972573,
+        "pr_auc": 0.9551743148370804,
+        "brier": 0.08101642457840122,
+        "log_loss": 0.2732432114167316,
+        "ece": 0.02657763963229958,
+        "recall_at_fpr_1pct": 0.5595856859738997,
+        "recall_at_fpr_0_1pct": 0.21975844146131698
+      },
+      "legit_flagged_FRAUD_rate": 0.04732687477574453,
+      "phish_called_LEGITIMATE_rate": 0.021575739445836295
+    },
+    "jpcert_recent": {
+      "n": 13352,
+      "n_unseen_domains": 13291,
+      "FRAUD_share": 0.6924986833195396,
+      "LEGITIMATE_share": 0.020464976299751712,
+      "REVIEW_share": 0.28703634038070874
+    },
+    "openphish26": {
+      "n": 300,
+      "n_unseen_domains": 201,
+      "FRAUD_share": 0.8407960199004975,
+      "LEGITIMATE_share": 0.009950248756218905,
+      "REVIEW_share": 0.14925373134328362
+    },
+    "tranco_home": {
+      "n": 9646,
+      "n_unseen_domains": 6276,
+      "FRAUD_share": 0.09034416826003824,
+      "LEGITIMATE_share": 0.1950286806883365,
+      "REVIEW_share": 0.7146271510516253
+    }
+  }
+}

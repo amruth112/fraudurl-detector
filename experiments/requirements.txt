@@ -1,0 +1,11 @@
+# Research / training dependencies (the fraudurl tool itself needs none of these).
+# Versions used for the published results:
+numpy==2.5.3
+pandas==3.0.6
+scipy==1.18.1
+scikit-learn==1.9.1
+lightgbm==4.7.0
+psutil==7.2.2
+pytest>=7
+# The Laya comparison (experiments/laya_*.py) additionally needs PyTorch and the Laya package:
+# see https://huggingface.co/convaiinnovations and REPORT.md section 2.

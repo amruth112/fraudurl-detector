@@ -1,0 +1,14 @@
+{
+  "train": "phreshphish",
+  "test": "openphish26",
+  "n_train": 150000,
+  "n_test_all": 300,
+  "n_test_unseen_domains": 269,
+  "all_lexical": {
+    "recall_at_0.5": 0.8810408921933085,
+    "recall_at_val_fpr1pct_threshold": 0.8252788104089219
+  },
+  "char_ngram_lr": {
+    "recall_at_0.5": 0.8698884758364313
+  }
+}

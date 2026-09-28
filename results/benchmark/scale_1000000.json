@@ -1,0 +1,28 @@
+{
+ "n_urls": 1000000,
+ "unique_urls_in_input": 501683,
+ "unique_url_pool": 630204,
+ "unique_registrable_domains": 288380,
+ "cli_args": "default (safe mode, workers = min(4, cpu_count))",
+ "cpu": "Intel i5-7500 (4 cores, 3.4 GHz), Windows 10",
+ "seconds": 379.7,
+ "urls_per_second": 2633.9,
+ "peak_rss_MB_process_tree": 226.9,
+ "rss_MB_at_25_50_75_100pct_of_run": [
+  222.2,
+  224.0,
+  225.7,
+  226.5
+ ],
+ "input_bytes": 76706129,
+ "output_bytes": 292097964,
+ "output_rows": 1000000,
+ "returncode": 0,
+ "verdicts": {
+  "LEGITIMATE": 437737,
+  "FRAUD": 349640,
+  "REVIEW": 212608,
+  "ERROR": 15
+ },
+ "stderr_tail": "(2,620/s)\r940,000 URLs processed (2,621/s)\r960,000 URLs processed (2,626/s)\r980,000 URLs processed (2,631/s)\r1,000,000 URLs processed (2,636/s)\r\nDone: 1,000,000 URLs in 379.4s -> .cache/tmp/scale_1000000.csv.out.csv\r\nVerdicts: ERROR=15, FRAUD=349,640, LEGITIMATE=437,737, REVIEW=212,608\r\n"
+}

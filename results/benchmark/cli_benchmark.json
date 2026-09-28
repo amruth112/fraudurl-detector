@@ -1,0 +1,40 @@
+{
+  "n_urls": 200000,
+  "cpu": "Intel i5-7500 (4 cores, 3.4 GHz), Windows 10",
+  "runs": [
+    {
+      "label": "cold start, 10 URLs, 1 process",
+      "seconds": 0.29599952697753906,
+      "peak_rss_MB_process_tree": 24.354816,
+      "returncode": 0,
+      "stderr_tail": "\r10 URLs processed (145/s)\r\nDone: 10 URLs in 0.1s -> .cache\\tmp\\bench_10.csv.out.csv\r\nVerdicts: FRAUD=4, LEGITIMATE=4, REVIEW=2\r\n",
+      "urls_per_second": 33.78383777200704
+    },
+    {
+      "label": "200000 URLs, 1 process",
+      "seconds": 197.61224246025085,
+      "peak_rss_MB_process_tree": 68.95616,
+      "returncode": 0,
+      "stderr_tail": "60,000 URLs processed (1,033/s)\r80,000 URLs processed (1,027/s)\r100,000 URLs processed (1,022/s)\r120,000 URLs processed (1,019/s)\r140,000 URLs processed (1,017/s)\r160,000 URLs processed (1,015/s)\r180,000 URLs processed (1,014/s)\r200,000 URLs processed (1,013/s)\r\nDone: 200,000 URLs in 197.4s -> .cache\\tmp\\bench_200000.csv.out1.csv\r\nVerdicts: ERROR=2, FRAUD=61,260, LEGITIMATE=91,991, REVIEW=46,747\r\n",
+      "urls_per_second": 1012.0830446030157
+    },
+    {
+      "label": "200000 URLs, 4 processes",
+      "seconds": 62.9188597202301,
+      "peak_rss_MB_process_tree": 223.27296,
+      "returncode": 0,
+      "stderr_tail": "\r60,000 URLs processed (3,203/s)\r80,000 URLs processed (3,209/s)\r100,000 URLs processed (3,211/s)\r120,000 URLs processed (3,208/s)\r140,000 URLs processed (3,213/s)\r160,000 URLs processed (3,191/s)\r180,000 URLs processed (3,195/s)\r200,000 URLs processed (3,195/s)\r\nDone: 200,000 URLs in 62.7s -> .cache\\tmp\\bench_200000.csv.out4.csv\r\nVerdicts: ERROR=2, FRAUD=61,260, LEGITIMATE=91,991, REVIEW=46,747\r\n",
+      "urls_per_second": 3178.6971488247527
+    }
+  ],
+  "package_bytes": {
+    "data_files": {
+      "model_enrich.json": 72280,
+      "model_safe.json": 459240,
+      "public_suffix_list.dat": 334786
+    },
+    "python_code": 96676,
+    "total": 962982
+  },
+  "output_rows": 200000
+}

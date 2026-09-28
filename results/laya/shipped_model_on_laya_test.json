@@ -1,0 +1,7 @@
+{
+ "n": 1500,
+ "n_phishing": 683,
+ "roc_auc": 0.9863837809648914,
+ "recall_at_fpr_1pct": 0.8594436310395315,
+ "model": "fraudurl/data/model_safe.json"
+}

@@ -1,0 +1,36 @@
+id,url,known_label
+1,https://www.twinspires.com/bet/program/classic/saratoga/sar/thoroughbred/13/pps,legitimate (held-out test set)
+2,https://www.playscripts.com/,legitimate (held-out test set)
+3,https://www.wyff4.com/article/real-id-south-carolina/63588354,legitimate (held-out test set)
+4,https://www.met.ie/warnings/friday/marine/ei811,legitimate (held-out test set)
+5,https://servizi.torinofacile.it/info/servizi/certificazione,legitimate (held-out test set)
+6,https://www.lundsandbyerlys.com/sm/pickup/rsid/1007/shoppable-weekly-ad,legitimate (held-out test set)
+7,https://nd02203833.schoolwires.net/site/default.aspx,legitimate (held-out test set)
+8,https://www.fool.com.au/tickers/asx-iag/,legitimate (held-out test set)
+9,https://www.zdnet.com/article/android-17-web-browsing-security-privacy-features-update/,legitimate (held-out test set)
+10,https://www.evalapply.org/posts/side-step-secretary-problem-hiring/index.html,legitimate (held-out test set)
+11,https://www.thescottishfarmer.co.uk/news/26534316.france-unveils-eur1-1bn-aid-package-drought-hit-farmers/,legitimate (held-out test set)
+12,https://tcz.hu/blog/2026/09/03/human-tool/,legitimate (held-out test set)
+13,https://proxy.kyc.red/,legitimate (held-out test set)
+14,https://unbiased.ai/model-card/,legitimate (held-out test set)
+15,https://llwdc.com,legitimate (held-out test set)
+16,http://itunes.apple.com.account-verify.example.net/mim/t0598zry5c01h7w60ff18955z55j1wq48us00r6uo0394k5384.html,"made-up phishing-style URL (reserved domain, not real)"
+17,http://old-accountants.example.org/.tmb/100458/01459/Amazon,"made-up phishing-style URL (reserved domain, not real)"
+18,http://198.51.100.23/,"made-up phishing-style URL (reserved domain, not real)"
+19,http://wine-shop.example.com/help/Login/identity/signin/myaccount/signin,"made-up phishing-style URL (reserved domain, not real)"
+20,http://ski-resort.example.org/wp-content/daily_activity/2015-06-10_activite.html,"made-up phishing-style URL (reserved domain, not real)"
+21,http://blog.example.net/Class/confirm/paypal/signin,"made-up phishing-style URL (reserved domain, not real)"
+22,http://www.plugins-shop.example.com/plugins/authentication/help/customer_center/customer-IDPP00C144/myaccount/signin,"made-up phishing-style URL (reserved domain, not real)"
+23,http://paypal.com.secure-login.test/webscr/login.php?cmd=verify,"made-up phishing-style URL (reserved domain, not real)"
+24,http://startup-demo.example.net/doc/login.php,"made-up phishing-style URL (reserved domain, not real)"
+25,https://acces-en-ligne-demo.example/,"made-up phishing-style URL (reserved domain, not real)"
+26,http://archive.example.com/_archived/U.S.Bank/U.S.Bank/home/auth/information.php,"made-up phishing-style URL (reserved domain, not real)"
+27,https://docs.google.com/forms/d/e/EXAMPLE-ONLY/viewform,"made-up phishing-style URL (real platform, placeholder form ID)"
+28,http://family-blog.example.org/www.spk.de/spk.sicherheit.htm,"made-up phishing-style URL (reserved domain, not real)"
+29,http://portal.prizes.example.com//?id=RVhBTVBMRS1PTkxZLU5PVC1BLVJFQUwtVE9LRU4,"made-up phishing-style URL (reserved domain, not real)"
+30,http://www.wpischedbend.example.net/points.php/?email=,"made-up phishing-style URL (reserved domain, not real)"
+31,https://www.wikipedia.org/,legitimate homepage
+32,github.com/python/cpython,"legitimate, no scheme"
+33,,empty cell
+34,not a url,junk value
+35,http://192.0.2.10/login.php,documentation IP (RFC 5737)

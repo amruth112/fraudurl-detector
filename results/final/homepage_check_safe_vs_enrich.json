@@ -1,0 +1,35 @@
+{
+ "n": 1000,
+ "sample": "tranco_home unseen domains, random_state=7",
+ "safe": {
+  "REVIEW": 0.76,
+  "LEGITIMATE": 0.209,
+  "FRAUD": 0.031
+ },
+ "enrich": {
+  "REVIEW": 0.629,
+  "LEGITIMATE": 0.338,
+  "FRAUD": 0.033
+ },
+ "enrich_analysis_modes": {
+  "enriched (URL + DNS + RDAP)": 764,
+  "safe (enrichment unavailable for this URL)": 236
+ },
+ "legit_homepages_called_fraud_with_enrich": [
+  "https://zelvora.vip/",
+  "https://405kk.com/",
+  "https://s-microsoft.com/",
+  "https://browser-intake-us5-datadoghq.com/",
+  "https://cloudlinks.cn/",
+  "https://gmw.cn/",
+  "https://thepaper.cn/",
+  "https://tdnsstic1.cn/",
+  "https://amazon-adsystem.com/",
+  "https://eye4.cn/",
+  "https://educationportal3.in/",
+  "https://pub.network/",
+  "https://gslbnspk.ru/",
+  "https://blacktoon416.com/",
+  "https://huaweicloud-dns.cn/"
+ ]
+}

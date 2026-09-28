@@ -1,0 +1,5 @@
+* text=auto eol=lf
+# CSV files keep their exact bytes (the tool writes CRLF rows); CI compares them byte for byte
+*.csv -text
+*.png binary
+results/** linguist-generated=true

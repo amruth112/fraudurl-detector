@@ -1,0 +1,724 @@
+{
+ "what": "estimate of `python -m fraudurl <1,000,000-row csv> --enrich` (default settings), made WITHOUT any network access (sockets/DNS/urllib blocked in this process)",
+ "inputs": {
+  "scale_input": ".cache\\tmp\\scale_1000000.csv",
+  "scale_output": ".cache\\tmp\\scale_1000000.csv.out.csv",
+  "scale_result": "results\\benchmark\\scale_1000000.json",
+  "safe_mode_measured": {
+   "seconds": 379.7,
+   "urls_per_second": 2633.9,
+   "peak_rss_MB_process_tree": 226.9,
+   "input_bytes": 76706129,
+   "output_bytes": 292097964,
+   "verdicts": {
+    "LEGITIMATE": 437737,
+    "FRAUD": 349640,
+    "REVIEW": 212608,
+    "ERROR": 15
+   }
+  }
+ },
+ "code_facts": {
+  "thread_pool_workers": 8,
+  "rdap_min_interval_s_per_registry": 0.5,
+  "rdap_max_requests_per_s_per_registry": 2.0,
+  "rdap_timeout_s": 8.0,
+  "dns_cache_ttl_days": 7.0,
+  "rdap_cache_ttl_days": 28.0,
+  "doh_servers": [
+   "1.1.1.1",
+   "1.0.0.1"
+  ],
+  "doh_queries_per_host": 4,
+  "doh_query_timeout_s": 3.0,
+  "doh_attempts_per_query": 3,
+  "cli_chunk_rows": 20000,
+  "rdap_bootstrap_tlds": 1202,
+  "rdap_bootstrap_file": ".cache\\fraudurl_cache\\rdap_bootstrap_dns.json",
+  "enricher_close_skips_empty_caches": true,
+  "mechanics": {
+   "per_unique_host (DNS, DoH to Cloudflare 1.1.1.1/1.0.0.1)": "4 sequential DoH GET queries in one job: A and AAAA for the host, NS and MX for the registrable domain (NS/MX skipped only when the host has no registrable domain). NS/MX are NOT de-duplicated per domain: two hosts on the same domain query its NS and MX twice. Each query: timeout 3 s, up to 3 attempts (alternating 1.1.1.1 / 1.0.0.1), persistent TLS connection per thread and server.",
+   "per_unique_registrable_domain (RDAP)": "one GET <registry RDAP base>/domain/<domain>; the base URL comes from the IANA bootstrap file by the last label (TLD) only. No server for the TLD -> immediate 'no_rdap_server' (no request).",
+   "skipped (no lookup at all)": "empty/whitespace values and values without a dotted host ('skipped (no domain)'); IP-address hosts ('skipped (IP host)'); shared platforms (cli._platform): PSL private suffixes (e.g. *.github.io), USER_CONTENT_HOSTS (e.g. docs.google.com, blogspot.com) matched on host, registrable domain or suffix, and SHORTENERS (e.g. bit.ly) matched on host or registrable domain.",
+   "thread_pool": "Enricher.run builds a NEW ThreadPoolExecutor(8) for every CLI chunk; all DNS jobs of the chunk are submitted first, then all RDAP jobs (set order, i.e. effectively random). DNS and RDAP share the 8 threads, so the RDAP phase of a chunk only starts when the DNS queue is drained, and the chunk ends only when its slowest lookup ends (barrier per chunk).",
+   "rdap_throttle": "RdapClient._throttle: one lock per registry base URL; a thread takes the lock, sleeps until last_request + 0.5 s, stamps the time and releases it -> <= 2 requests/s per registry. Threads waiting for a busy registry's lock (or sleeping inside it) are blocked, so when one registry (Verisign .com) holds a large share of the queue, most of the 8 threads end up queued on its lock and the whole pool advances at that registry's 2 req/s.",
+   "rdap_429_and_errors": "HTTP 429: sleep Retry-After seconds (numeric) or 5 s, capped at 15 s, while still occupying the thread, then retry through the throttle again; 3 attempts total, then status 'http_429'. Other HTTP errors -> 'http_<code>' immediately (404 -> 'not_found'). Network errors/timeouts (8 s): 2 attempts, then 'error:<Type>'. The final 'rate_limited' return is unreachable with the current loop.",
+   "caching": "JsonlCache: whole JSONL file loaded into a dict at start; each new result appended + flushed immediately. DNS cached 7 days for a_status ok/nodata/nxdomain/servfail/refused/bad_name (timeouts/errors NOT cached); RDAP cached 28 days for ok/not_found/no_rdap_server (429, 403, 5xx, timeouts, bad JSON NOT cached). Expired or failed keys are looked up again and appended again (file only grows, never compacted).",
+   "chunking": "the CLI reads 20,000 rows, enriches them in the MAIN process (the 4 scoring worker processes are idle meanwhile), then scores the chunk in the process pool and writes it. A host/domain seen in an earlier chunk is a cache hit; one whose lookup FAILED is looked up again in every later chunk that contains it. No progress callback is passed to Enricher.run, so the progress line only moves once per finished chunk.",
+   "resume_after_interrupt": "the cache persists (every successful result is flushed as it is collected), so a re-run skips everything already cached; the OUTPUT file is reopened with 'w' and restarts from row 1 (re-scoring is fast). Results of lookups still queued or finished-but-not-yet-collected when the run stops are lost. On an exception inside the chunk loop the `with ThreadPoolExecutor` exit still waits for every queued lookup of the chunk (see executor_exit_demo) and those results are not written to the cache."
+  },
+  "executor_exit_demo": {
+   "jobs": 64,
+   "job_seconds": 0.25,
+   "workers": 8,
+   "seconds_until_with_block_exited": 2.03,
+   "seconds_if_it_stopped_immediately": 0.25,
+   "seconds_if_all_jobs_run": 2.0
+  }
+ },
+ "workload_1m": {
+  "rows": 1000000,
+  "rows_by_enrichment_path": {
+   "lookup": 810950,
+   "skipped_platform": 186955,
+   "skipped_ip_host": 2080,
+   "skipped_no_domain": 15
+  },
+  "platform_rows_by_reason": {
+   "psl_private_suffix": 180464,
+   "shortener": 1429,
+   "user_content_host": 5062
+  },
+  "unique_hosts_dns_jobs": 259345,
+  "hosts_without_registrable_domain": 1,
+  "unique_registrable_domains_rdap_jobs": 209656,
+  "doh_queries_total": 1037378,
+  "redundant_ns_mx_queries_(same_domain_queried_again_for_another_host)": 99376,
+  "rdap_domains_per_registry_top15": [
+   {
+    "rdap_base": "https://rdap.verisign.com/com/v1/",
+    "domains": 112202,
+    "share": 0.5352
+   },
+   {
+    "rdap_base": "https://rdap.publicinterestregistry.org/rdap/",
+    "domains": 11884,
+    "share": 0.0567
+   },
+   {
+    "rdap_base": "https://rdap.gmoregistry.net/rdap/",
+    "domains": 6294,
+    "share": 0.03
+   },
+   {
+    "rdap_base": "https://rdap.identitydigital.services/rdap/",
+    "domains": 6003,
+    "share": 0.0286
+   },
+   {
+    "rdap_base": "https://rdap.verisign.com/net/v1/",
+    "domains": 5766,
+    "share": 0.0275
+   },
+   {
+    "rdap_base": "https://rdap.nominet.uk/uk/",
+    "domains": 5560,
+    "share": 0.0265
+   },
+   {
+    "rdap_base": "https://rdap.zdnsgtld.com/top/",
+    "domains": 5082,
+    "share": 0.0242
+   },
+   {
+    "rdap_base": "https://rdap.cctld.au/rdap/",
+    "domains": 3488,
+    "share": 0.0166
+   },
+   {
+    "rdap_base": "https://rdap.radix.host/rdap/",
+    "domains": 1750,
+    "share": 0.0083
+   },
+   {
+    "rdap_base": "https://tld-rdap.verisign.com/cc/v1/",
+    "domains": 1717,
+    "share": 0.0082
+   },
+   {
+    "rdap_base": "https://rdap.centralnic.com/xyz/",
+    "domains": 1681,
+    "share": 0.008
+   },
+   {
+    "rdap_base": "https://rdap.ca.fury.ca/rdap/",
+    "domains": 1458,
+    "share": 0.007
+   },
+   {
+    "rdap_base": "https://rdap.nic.gov/rdap/",
+    "domains": 1304,
+    "share": 0.0062
+   },
+   {
+    "rdap_base": "https://rdap.registro.br/",
+    "domains": 1197,
+    "share": 0.0057
+   },
+   {
+    "rdap_base": "https://rdap.registry.click/rdap/",
+    "domains": 1194,
+    "share": 0.0057
+   }
+  ],
+  "rdap_registries_used": 246,
+  "rdap_domains_with_rdap_server": 182667,
+  "rdap_domains_without_rdap_server": 26989,
+  "no_rdap_server_top_tlds": {
+   "jp": 4185,
+   "cn": 2849,
+   "it": 2401,
+   "de": 1953,
+   "edu": 1471,
+   "io": 1310,
+   "co": 1150,
+   "ru": 1086,
+   "us": 1015,
+   "se": 655,
+   "eu": 597,
+   "me": 541
+  },
+  "domain_chunk_appearances": 692847,
+  "chunks": 50,
+  "per_chunk_new_hosts_first_median_last": [
+   14572,
+   4205,
+   1743
+  ],
+  "per_chunk_new_domains_first_median_last": [
+   13852,
+   3220,
+   1298
+  ],
+  "per_chunk_busiest_registry_domains_first_median_last": [
+   7602,
+   1721,
+   674
+  ],
+  "busiest_registry": "https://rdap.verisign.com/com/v1/",
+  "note": "counts assume every lookup succeeds and is cached; a domain whose RDAP lookup keeps failing is retried in every chunk it appears in (domain_chunk_appearances is that upper bound)"
+ },
+ "calibration": {
+  "cache_sessions_found": 3,
+  "method": "put timestamps ('t') in .cache/fraudurl_cache/{dns,rdap}.jsonl; a session = puts with gaps < 120 s. Puts happen in submission order in the main thread, so the last DNS put ~ end of the DNS phase and the last RDAP put ~ end of the run's lookups.",
+  "runs": [
+   {
+    "sample_file": ".cache\\tmp\\tranco_home_1000.csv",
+    "session_start_local": "2026-09-25 17:24:52",
+    "hosts_looked_up": 997,
+    "hosts_already_cached_from_earlier_run": 0,
+    "domains_looked_up": 997,
+    "domains_already_cached": 0,
+    "domains_looked_up_but_not_in_cache_(failed/uncached_status)": 10,
+    "domains_per_registry_top5": [
+     {
+      "rdap_base": "https://rdap.verisign.com/com/v1/",
+      "domains": 494
+     },
+     {
+      "rdap_base": "https://rdap.verisign.com/net/v1/",
+      "domains": 89
+     },
+     {
+      "rdap_base": "https://rdap.publicinterestregistry.org/rdap/",
+      "domains": 44
+     },
+     {
+      "rdap_base": "https://rdap.identitydigital.services/rdap/",
+      "domains": 22
+     },
+     {
+      "rdap_base": "https://rdap.nic.gov/rdap/",
+      "domains": 19
+     }
+    ],
+    "domains_without_rdap_server": 203,
+    "busiest_registry": "https://rdap.verisign.com/com/v1/",
+    "busiest_registry_domains": 494,
+    "busiest_x_0.5s": 247.0,
+    "measured_dns_phase_s_(first_to_last_dns_put)": 45.9,
+    "measured_rdap_phase_s_(last_dns_put_to_last_rdap_put)": 241.0,
+    "measured_lookup_span_s_(first_dns_put_to_last_rdap_put)": 286.9,
+    "busiest_registry_put_gap_median_s": 0.503,
+    "busiest_registry_put_slope_s_per_domain_(lstsq)": 0.516,
+    "effective_s_per_doh_query_(dns_span*8/queries)": 0.092,
+    "model_predicted_lookup_seconds": {
+     "R=0.3s": 292.5,
+     "R=1.0s": 293.2
+    }
+   },
+   {
+    "sample_file": ".cache\\tmp\\homepage_check_1000.csv",
+    "session_start_local": "2026-09-25 19:37:28",
+    "hosts_looked_up": 913,
+    "hosts_already_cached_from_earlier_run": 87,
+    "domains_looked_up": 913,
+    "domains_already_cached": 87,
+    "domains_looked_up_but_not_in_cache_(failed/uncached_status)": 7,
+    "domains_per_registry_top5": [
+     {
+      "rdap_base": "https://rdap.verisign.com/com/v1/",
+      "domains": 431
+     },
+     {
+      "rdap_base": "https://rdap.verisign.com/net/v1/",
+      "domains": 102
+     },
+     {
+      "rdap_base": "https://rdap.publicinterestregistry.org/rdap/",
+      "domains": 31
+     },
+     {
+      "rdap_base": "https://rdap.identitydigital.services/rdap/",
+      "domains": 22
+     },
+     {
+      "rdap_base": "https://rdap.nixiregistry.in/rdap/",
+      "domains": 11
+     }
+    ],
+    "domains_without_rdap_server": 209,
+    "busiest_registry": "https://rdap.verisign.com/com/v1/",
+    "busiest_registry_domains": 431,
+    "busiest_x_0.5s": 215.5,
+    "measured_dns_phase_s_(first_to_last_dns_put)": 25.6,
+    "measured_rdap_phase_s_(last_dns_put_to_last_rdap_put)": 213.5,
+    "measured_lookup_span_s_(first_dns_put_to_last_rdap_put)": 239.1,
+    "busiest_registry_put_gap_median_s": 0.5,
+    "busiest_registry_put_slope_s_per_domain_(lstsq)": 0.522,
+    "effective_s_per_doh_query_(dns_span*8/queries)": 0.056,
+    "model_predicted_lookup_seconds": {
+     "R=0.3s": 240.8,
+     "R=1.0s": 242.0
+    }
+   }
+  ],
+  "reported_wall_seconds_(task brief, not in a result file)": "241-289 s for the cold-cache 1,000-homepage --enrich runs"
+ },
+ "timing_1m": {
+  "assumptions": {
+   "doh_query_seconds": "ASSUMPTION range 0.02-0.08 s per DoH query (cannot be measured offline); the two earlier real runs imply an effective 0.056-0.092 s per query on the development network (see calibration)",
+   "rdap_request_seconds": "ASSUMPTION 0.3 or 1.0 s per RDAP HTTP request; matters little because the throttle binds",
+   "rdap_interval_s": 0.5,
+   "threads": 8,
+   "scoring": "2633.9 URLs/s per chunk (measured safe-mode throughput; enrich-model scoring cost not measured)",
+   "failures": "none in the base scenarios (every lookup answers once)"
+  },
+  "analytic_lower_bounds": {
+   "optimistic: 20 ms/DoH query, 0.3 s/RDAP request": {
+    "dns_phase_hours": 0.72,
+    "rdap_phase_hours_sum_of_per_chunk_busiest_registry": 15.58,
+    "rdap_hours_if_no_chunk_barriers_(busiest_registry_total_x_interval)": 15.58
+   },
+   "central: 56 ms/DoH query (faster measured run), 0.3 s/RDAP request": {
+    "dns_phase_hours": 2.02,
+    "rdap_phase_hours_sum_of_per_chunk_busiest_registry": 15.58,
+    "rdap_hours_if_no_chunk_barriers_(busiest_registry_total_x_interval)": 15.58
+   },
+   "slow: 92 ms/DoH query (slower measured run), 1.0 s/RDAP request": {
+    "dns_phase_hours": 3.31,
+    "rdap_phase_hours_sum_of_per_chunk_busiest_registry": 15.58,
+    "rdap_hours_if_no_chunk_barriers_(busiest_registry_total_x_interval)": 15.58
+   }
+  },
+  "simulated": {
+   "optimistic: 20 ms/DoH query, 0.3 s/RDAP request": {
+    "hours": 16.41,
+    "seconds": 59063.0,
+    "first_chunk_minutes": 65.9,
+    "median_chunk_minutes": 15.2,
+    "last_chunk_minutes": 6.0,
+    "share_of_thread_time_blocked_on_rdap_throttle": 0.832,
+    "rdap_domains_ending_http_429": 0,
+    "rdap_domains_ending_timeout": 0
+   },
+   "central: 56 ms/DoH query (faster measured run), 0.3 s/RDAP request": {
+    "hours": 17.7,
+    "seconds": 63728.0,
+    "first_chunk_minutes": 70.3,
+    "median_chunk_minutes": 16.4,
+    "last_chunk_minutes": 6.6,
+    "share_of_thread_time_blocked_on_rdap_throttle": 0.771,
+    "rdap_domains_ending_http_429": 0,
+    "rdap_domains_ending_timeout": 0
+   },
+   "slow: 92 ms/DoH query (slower measured run), 1.0 s/RDAP request": {
+    "hours": 19.01,
+    "seconds": 68431.0,
+    "first_chunk_minutes": 74.7,
+    "median_chunk_minutes": 17.7,
+    "last_chunk_minutes": 7.1,
+    "share_of_thread_time_blocked_on_rdap_throttle": 0.485,
+    "rdap_domains_ending_http_429": 0,
+    "rdap_domains_ending_timeout": 0
+   }
+  },
+  "failure_scenarios": {
+   "Verisign .com answers 429 to 5% of requests (Retry-After 5 s)": {
+    "hours": 18.54,
+    "seconds": 66734.0,
+    "first_chunk_minutes": 73.9,
+    "median_chunk_minutes": 17.2,
+    "last_chunk_minutes": 6.8,
+    "share_of_thread_time_blocked_on_rdap_throttle": 0.722,
+    "rdap_domains_ending_http_429": 10,
+    "rdap_domains_ending_timeout": 0
+   },
+   "Verisign .com answers 429 to 50% of requests (Retry-After 5 s)": {
+    "hours": 29.68,
+    "seconds": 106830.0,
+    "first_chunk_minutes": 118.3,
+    "median_chunk_minutes": 27.3,
+    "last_chunk_minutes": 10.9,
+    "share_of_thread_time_blocked_on_rdap_throttle": 0.338,
+    "rdap_domains_ending_http_429": 14068,
+    "rdap_domains_ending_timeout": 0
+   },
+   "Verisign .com answers 429 to every request (sustained rate limit)": {
+    "hours": 49.69,
+    "seconds": 178874.0,
+    "first_chunk_minutes": 199.7,
+    "median_chunk_minutes": 45.9,
+    "last_chunk_minutes": 18.3,
+    "share_of_thread_time_blocked_on_rdap_throttle": 0.086,
+    "rdap_domains_ending_http_429": 112202,
+    "rdap_domains_ending_timeout": 0
+   },
+   "Verisign .com RDAP stops answering (every request times out after 8 s)": {
+    "hours": 65.64,
+    "seconds": 236291.0,
+    "first_chunk_minutes": 264.5,
+    "median_chunk_minutes": 60.6,
+    "last_chunk_minutes": 24.0,
+    "share_of_thread_time_blocked_on_rdap_throttle": 0.005,
+    "rdap_domains_ending_http_429": 0,
+    "rdap_domains_ending_timeout": 112202
+   },
+   "DoH degraded: 5% of queries time out on all 3 attempts (9 s)": {
+    "hours": 33.8,
+    "seconds": 121678.0,
+    "first_chunk_minutes": 125.4,
+    "median_chunk_minutes": 32.6,
+    "last_chunk_minutes": 12.7,
+    "share_of_thread_time_blocked_on_rdap_throttle": 0.402,
+    "rdap_domains_ending_http_429": 0,
+    "rdap_domains_ending_timeout": 0
+   }
+  },
+  "input_sorted_by_host": {
+   "what": "same 1M rows sorted by reversed host name (i.e. grouped by TLD, then domain) instead of the file order",
+   "central": {
+    "dns_phase_hours": 2.02,
+    "rdap_phase_hours_sum_of_per_chunk_busiest_registry": 22.17,
+    "rdap_hours_if_no_chunk_barriers_(busiest_registry_total_x_interval)": 15.58
+   },
+   "simulated_central": {
+    "hours": 24.3,
+    "seconds": 87472.0,
+    "first_chunk_minutes": 0.1,
+    "median_chunk_minutes": 40.7,
+    "last_chunk_minutes": 17.4,
+    "share_of_thread_time_blocked_on_rdap_throttle": 0.834,
+    "rdap_domains_ending_http_429": 0,
+    "rdap_domains_ending_timeout": 0
+   }
+  },
+  "failure_scenarios_note": "failed lookups are not cached, so in reality each failing domain would ALSO be retried in every later chunk containing it; the simulation charges each domain once (optimistic)"
+ },
+ "review_only": {
+  "rows": 212608,
+  "rows_by_enrichment_path": {
+   "lookup": 199405,
+   "skipped_platform": 13203,
+   "skipped_ip_host": 0,
+   "skipped_no_domain": 0
+  },
+  "unique_hosts_dns_jobs": 83116,
+  "unique_registrable_domains_rdap_jobs": 71699,
+  "rdap_domains_without_rdap_server": 8615,
+  "busiest_registry_domains": {
+   "rdap_base": "https://rdap.verisign.com/com/v1/",
+   "domains": 47392,
+   "share": 0.661
+  },
+  "simulated": {
+   "optimistic: 20 ms/DoH query, 0.3 s/RDAP request": {
+    "hours": 6.83,
+    "seconds": 24605.0,
+    "first_chunk_minutes": 85.9,
+    "median_chunk_minutes": 31.1,
+    "last_chunk_minutes": 8.5,
+    "share_of_thread_time_blocked_on_rdap_throttle": 0.866,
+    "rdap_domains_ending_http_429": 0,
+    "rdap_domains_ending_timeout": 0
+   },
+   "central: 56 ms/DoH query (faster measured run), 0.3 s/RDAP request": {
+    "hours": 7.25,
+    "seconds": 26101.0,
+    "first_chunk_minutes": 90.7,
+    "median_chunk_minutes": 33.0,
+    "last_chunk_minutes": 9.1,
+    "share_of_thread_time_blocked_on_rdap_throttle": 0.816,
+    "rdap_domains_ending_http_429": 0,
+    "rdap_domains_ending_timeout": 0
+   },
+   "slow: 92 ms/DoH query (slower measured run), 1.0 s/RDAP request": {
+    "hours": 7.67,
+    "seconds": 27604.0,
+    "first_chunk_minutes": 95.6,
+    "median_chunk_minutes": 35.0,
+    "last_chunk_minutes": 9.7,
+    "share_of_thread_time_blocked_on_rdap_throttle": 0.572,
+    "rdap_domains_ending_http_429": 0,
+    "rdap_domains_ending_timeout": 0
+   }
+  }
+ },
+ "rule_of_thumb": {
+  "formula": "hours per 100k unique registrable domains ~= [100k x busiest-registry share x 0.5 s  +  100k x DoH-queries-per-domain x q / 8] / 3600  (+ chunk-barrier overhead, see timing_1m)",
+  "1M-file mix: .com 53.5% of domains, 1.24 hosts and 4.95 DoH queries per domain": {
+   "q=20ms": 7.8,
+   "q=56ms": 8.4,
+   "q=80ms": 8.8,
+   "rdap_part_hours": 7.4
+  },
+  "Tranco-homepage mix: .com 49.5% of domains, 1 host and 4 DoH queries per domain": {
+   "q=20ms": 7.2,
+   "q=56ms": 7.7,
+   "q=80ms": 8.0,
+   "rdap_part_hours": 6.9
+  }
+ },
+ "memory": {
+  "method": "synthetic JSONL written exactly like JsonlCache.put, values sampled (with replacement, seed 0) from the real .cache/fraudurl_cache records, keys = real hosts / registrable domains of the 1M file (1-2 char numeric prefix once the real keys run out); loaded with fraudurl.cache.JsonlCache in a fresh python process; RSS measured with psutil before/after (gc.collect() both times); 2 runs each.",
+  "real_cache_records": {
+   "dns": {
+    "lines": 1942,
+    "bytes_per_line": 354.6
+   },
+   "rdap": {
+    "lines": 1919,
+    "bytes_per_line": 318.0
+   }
+  },
+  "per_file": [
+   {
+    "cache": "dns",
+    "entries": 100000,
+    "bytes_on_disk": 36180112,
+    "bytes_on_disk_per_entry": 361.8,
+    "load_seconds": [
+     1.22,
+     1.25
+    ],
+    "rss_increase_MB": [
+     220.5,
+     220.6
+    ],
+    "rss_bytes_per_entry": 2205.0,
+    "process_rss_after_load_MB": [
+     241.4,
+     241.3
+    ],
+    "process_peak_working_set_MB": [
+     241.4,
+     241.3
+    ]
+   },
+   {
+    "cache": "dns",
+    "entries": 1000000,
+    "bytes_on_disk": 363805513,
+    "bytes_on_disk_per_entry": 363.8,
+    "load_seconds": [
+     16.08,
+     15.69
+    ],
+    "rss_increase_MB": [
+     2197.2,
+     2197.1
+    ],
+    "rss_bytes_per_entry": 2197.0,
+    "process_rss_after_load_MB": [
+     2218.0,
+     2217.9
+    ],
+    "process_peak_working_set_MB": [
+     2218.0,
+     2217.9
+    ]
+   },
+   {
+    "cache": "rdap",
+    "entries": 100000,
+    "bytes_on_disk": 32134368,
+    "bytes_on_disk_per_entry": 321.3,
+    "load_seconds": [
+     0.89,
+     0.87
+    ],
+    "rss_increase_MB": [
+     170.2,
+     170.1
+    ],
+    "rss_bytes_per_entry": 1701.0,
+    "process_rss_after_load_MB": [
+     191.0,
+     191.0
+    ],
+    "process_peak_working_set_MB": [
+     191.0,
+     191.0
+    ]
+   },
+   {
+    "cache": "rdap",
+    "entries": 1000000,
+    "bytes_on_disk": 322199496,
+    "bytes_on_disk_per_entry": 322.2,
+    "load_seconds": [
+     11.01,
+     11.19
+    ],
+    "rss_increase_MB": [
+     1693.3,
+     1693.4
+    ],
+    "rss_bytes_per_entry": 1693.0,
+    "process_rss_after_load_MB": [
+     1713.8,
+     1714.2
+    ],
+    "process_peak_working_set_MB": [
+     1713.8,
+     1714.2
+    ]
+   }
+  ],
+  "projected_1m_run": {
+   "dns_entries": 259345,
+   "rdap_entries": 209656,
+   "cache_bytes_on_disk_MB": 161.9,
+   "load_seconds": [
+    5.86,
+    5.85
+   ],
+   "rss_increase_MB_both_caches": [
+    926.3,
+    926.3
+   ],
+   "rss_increase_MB_both_caches_built_by_put_(first_run)": [
+    675.5,
+    675.5
+   ],
+   "note": "measured, not extrapolated: both caches at the 1M run's final size in one fresh process. 'rss_increase_MB_both_caches' = loading the JSONL files with JsonlCache (start of a re-run / resumed run; json.loads makes fresh key strings for every record). '..._built_by_put' = the same records inserted with JsonlCache.put() using the dict shapes and constant keys of dns_lookup()/RdapClient.lookup() (what the first run accumulates by its end)."
+  },
+  "extrapolated_from_per_entry_MB": 926.6,
+  "projected_peak_process_tree_MB": {
+   "safe_mode_measured_peak": 226.9,
+   "plus_both_caches_measured": 1153.2,
+   "first_run_plus_caches_built_by_put": 902.4,
+   "note": "caches live only in the main process and grow during the run, so the peak is reached near the end; the per-chunk result dicts, futures and 8 threads add comparatively little (not measured)"
+  },
+  "machine_total_ram_GB": 17.0
+ },
+ "failed_lookups": {
+  "sample": ".cache\\tmp\\homepage_check_1000.csv (1,000 legitimate Tranco homepages)",
+  "method": "cli._enrich_chunk with an offline stub enricher, then cli.score_rows with the shipped enrich model (no --base-rate), exactly as cli.run.flush does",
+  "scenarios": {
+   "as_cached (real DNS+RDAP results from the cache)": {
+    "verdicts": {
+     "REVIEW": 629,
+     "LEGITIMATE": 338,
+     "FRAUD": 33
+    },
+    "analysis_mode": {
+     "safe (enrichment unavailable for this URL)": 236,
+     "enriched (URL + DNS + RDAP)": 764
+    },
+    "lookup_status_top5": {
+     "dns=ok; rdap=ok": 567,
+     "dns=nodata; rdap=ok; domain has no address records": 194,
+     "dns=ok; rdap=no_rdap_server": 187,
+     "dns=nodata; rdap=no_rdap_server; domain has no address records": 39,
+     "dns=ok; rdap=unavailable": 6
+    }
+   },
+   "RDAP failed for every domain (http_429, DNS as cached)": {
+    "verdicts": {
+     "REVIEW": 811,
+     "LEGITIMATE": 149,
+     "FRAUD": 40
+    },
+    "analysis_mode": {
+     "safe (enrichment unavailable for this URL)": 236,
+     "enriched (URL + DNS + RDAP)": 764
+    },
+    "lookup_status_top5": {
+     "dns=ok; rdap=http_429": 756,
+     "dns=nodata; rdap=http_429; domain has no address records": 233,
+     "dns=ok; rdap=unavailable": 6,
+     "dns=nodata; rdap=http_429": 2,
+     "dns=servfail; rdap=http_429; DNS lookup failed (servfail)": 1
+    }
+   },
+   "DNS timed out for every host (RDAP as cached)": {
+    "verdicts": {
+     "REVIEW": 760,
+     "LEGITIMATE": 209,
+     "FRAUD": 31
+    },
+    "analysis_mode": {
+     "safe (enrichment unavailable for this URL)": 1000
+    },
+    "lookup_status_top5": {
+     "dns=timeout; rdap=ok; DNS lookup failed (timeout)": 763,
+     "dns=timeout; rdap=no_rdap_server; DNS lookup failed (timeout)": 228,
+     "dns=timeout; rdap=unavailable; DNS lookup failed (timeout)": 7,
+     "dns=timeout; rdap=not_found; DNS lookup failed (timeout)": 2
+    }
+   }
+  },
+  "real_run_output_file_verdicts": {
+   "REVIEW": 629,
+   "LEGITIMATE": 338,
+   "FRAUD": 33
+  },
+  "reading": "A transient RDAP failure (429/timeout) does NOT fall back to safe mode: the row is still labelled 'enriched (URL + DNS + RDAP)' with lookup_status 'dns=ok; rdap=http_429', and the enrich model scores it with rdap_ok=0 and every RDAP feature missing - the same encoding as a TLD without RDAP. On these 1,000 legitimate homepages that moves LEGITIMATE 338 -> 149 and FRAUD 33 -> 40. A DNS failure falls back to the safe model and says so in analysis_mode."
+ },
+ "output_size": {
+  "safe_mode_output_bytes": 292097964,
+  "estimated_extra_bytes": 40272289,
+  "estimated_enrich_output_MB": 332.4,
+  "assumption": "every looked-up row gets 'dns=ok; rdap=ok' (or rdap=no_rdap_server); failures and dead domains have longer status text; top_reasons text differences ignored"
+ },
+ "headline": {
+  "wall_time_hours_range_no_failures": [
+   16.41,
+   19.01
+  ],
+  "wall_time_hours_central": 17.7,
+  "vs_safe_mode_seconds": 379.7,
+  "why": "112,202 of 209,656 registrable domains go to https://rdap.verisign.com/com/v1/, which the client throttles to 2 requests/s -> 15.6 h for that registry alone; the DNS phase adds 1,037,378 DoH queries over 8 threads",
+  "first_progress_line_after_minutes": 70.3,
+  "memory_MB_process_tree_peak_projected_first_run_vs_rerun": [
+   902.4,
+   1153.2
+  ],
+  "cache_on_disk_MB": 161.9,
+  "review_only_hours_central": 7.25
+ },
+ "risks": [
+  "TIME: 112,202 unique .com domains x 0.5 s (Verisign RDAP, throttled to 2 req/s by the client) = 15.6 h on its own; simulated total 16.41-19.01 h with no failures (safe mode: 379.7 s). About 77% of all thread time is spent blocked on the RDAP throttle; more threads would not help.",
+  "NO VISIBLE PROGRESS: the progress line only updates after a whole 20,000-row chunk is enriched and scored; the first chunk takes ~70 min, later ones ~16 min, which looks like a hang.",
+  "REGISTRY RATE LIMITS/BLOCKING: many hours of continuous 2 req/s traffic to one registry (Verisign .com) from one IP. Registry rate policies were not checked (no network). If it answers 429, each retry consumes another throttle slot and holds the thread 5-15 s, so the run gets SLOWER while producing no data: 50% 429s -> 29.68 h and 14,068 domains without RDAP; sustained 429 -> 49.69 h and no .com RDAP at all; .com RDAP unresponsive (8 s timeouts x 2) -> 65.64 h. A 403 (ban) returns immediately and silently turns every later .com domain into 'rdap=http_403'. Earlier project enrichment runs (experiments/logs/enrich_fresh26e.log, an earlier code version, 8,000 URLs / 5,058 domains) already recorded URL rows with rdap status http_429 (24) and http_403 (12).",
+  "MISSING RDAP IS NOT FLAGGED AS SAFE MODE: a row whose RDAP lookup failed is still labelled 'enriched (URL + DNS + RDAP)'; only lookup_status ('dns=ok; rdap=http_429') shows it, and the enrich model scores it like a TLD without RDAP. Offline on 1,000 legitimate homepages: LEGITIMATE 338 -> 149, REVIEW 629 -> 811, FRAUD 33 -> 40 when every RDAP lookup fails. A DNS failure instead falls back to the safe model and says so in analysis_mode.",
+  "FAILURES ARE NOT CACHED: DNS timeouts and RDAP 429/403/5xx/timeouts are retried in every later chunk that contains the same host/domain (up to 692,847 domain-chunk appearances vs 209,656 unique domains) and again on every re-run.",
+  "DNS: 1,037,378 DoH queries to Cloudflare (99,376 of them repeat NS/MX for a domain already queried via another host); a degraded resolver costs up to 9 s per query (3 attempts x 3 s): 5% failing queries -> 33.8 h.",
+  "INTERRUPTING: an exception raised inside a chunk (e.g. KeyboardInterrupt from Ctrl+C; its delivery timing on Windows was not tested) still waits for every queued lookup of that chunk (executor exit semantics, demonstrated offline: 64 x 0.25 s jobs on 8 threads took 2.0 s to exit, not 0.25 s) and those results are not cached; the output file restarts from row 1 on re-run (the cache makes the re-run skip finished lookups).",
+  "RAM: the two caches live in the main process as Python dicts (~2.2 KB per host, ~1.7 KB per domain after loading, 5-6x their size on disk). Projected process-tree peak ~902 MB at the end of the first run and ~1153 MB for a re-run/resume that loads the caches (safe mode: 226.9 MB). Fine on a 17 GB machine, but it grows linearly with unique hosts/domains and with every re-appended (expired/refreshed) key, because the JSONL files are append-only, never compacted and fully re-read at every start.",
+  "DISK: caches ~162 MB; output ~332 MB (safe: 292 MB).",
+  "PARALLEL RUNS: starting several --enrich processes (e.g. on split files) multiplies the per-registry request rate (each process has its own 2 req/s throttle) and makes them append to the same JSONL files without file locking (not tested here).",
+  "NO KNOBS: the CLI exposes no option to skip RDAP, change the thread count or throttle, or report lookup progress (--workers only sets the scoring processes).",
+  "STALE BOOTSTRAP: after 30 days the IANA RDAP bootstrap is re-downloaded; if that fails the stale copy is used.",
+  "MINOR CODE ISSUE: Enricher.close() skips caches that are still empty (JsonlCache defines __len__, so `if c:` is False) and leaves their files open until exit."
+ ],
+ "advice": [
+  "Run safe mode first (measured 379.7 s for 1M URLs), then enrich only the rows where enrichment can change the decision: the REVIEW rows (212,608 rows, 71,699 domains, ~7.25 h central estimate). Filter them into a new CSV and run --enrich on that.",
+  "Do not expect de-duplication to help much: lookups are already de-duplicated per host/domain via the cache; de-duplicating URLs only halves the (minor) scoring time. Do not sort the input by TLD/domain: the mixed order lets the other registries run in the shadow of .com (see timing_1m.input_sorted_by_host).",
+  "Budget ~0.5 s per unique .com domain plus DNS; keep the machine awake, keep the same --cache-dir so an interrupted run resumes from the cache, and do not run several enrich processes against the same registry at once.",
+  "After the run, count lookup_status values containing 'http_', 'error' or 'timeout' and re-run --enrich with the same cache to retry only those; treat rows with failed RDAP as not fully enriched.",
+  "If a registry starts answering 429/403, stop and resume later rather than letting the run continue: the rest of that registry's domains would get no RDAP data while still being labelled 'enriched'."
+ ],
+ "runtime_seconds_of_this_script": 193.2
+}

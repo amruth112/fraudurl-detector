@@ -1,0 +1,257 @@
+{
+  "fresh26e": {
+    "lexical_only": {
+      "roc_auc": 0.982616125,
+      "pr_auc": 0.9836699455400032,
+      "recall_at_fpr_1pct": 0.773,
+      "recall_at_fpr_0_1pct": 0.55425,
+      "log_loss": 0.1692853555752336
+    },
+    "lexical+dns": {
+      "roc_auc": 0.9905216875,
+      "pr_auc": 0.9911939225082861,
+      "recall_at_fpr_1pct": 0.86075,
+      "recall_at_fpr_0_1pct": 0.70625,
+      "log_loss": 0.12486822024316047
+    },
+    "lexical+rdap": {
+      "roc_auc": 0.9904924374999999,
+      "pr_auc": 0.9912730729847866,
+      "recall_at_fpr_1pct": 0.87075,
+      "recall_at_fpr_0_1pct": 0.67175,
+      "log_loss": 0.12360166476269725
+    },
+    "lexical+dns+rdap": {
+      "roc_auc": 0.9933528750000001,
+      "pr_auc": 0.9937759082799409,
+      "recall_at_fpr_1pct": 0.894,
+      "recall_at_fpr_0_1pct": 0.7535,
+      "log_loss": 0.10474370067871337
+    },
+    "dns+rdap_only": {
+      "roc_auc": 0.9701506875,
+      "pr_auc": 0.9711347502169543,
+      "recall_at_fpr_1pct": 0.6285,
+      "recall_at_fpr_0_1pct": 0.26525,
+      "log_loss": 0.2187026971341219
+    },
+    "lexical+dns+rdap__but_unavailable_at_test": {
+      "roc_auc": 0.9594835624999999,
+      "pr_auc": 0.9618008505928655,
+      "recall_at_fpr_1pct": 0.626,
+      "recall_at_fpr_0_1pct": 0.38725,
+      "log_loss": 1.2883724546646516
+    },
+    "live_only": {
+      "n": 6829,
+      "phish_share": 0.41543417777126956,
+      "removed_features": [
+        "dns_resolves",
+        "dns_nxdomain",
+        "dns_ok",
+        "rdap_not_found",
+        "rdap_ok",
+        "status_hold"
+      ],
+      "lexical_only": {
+        "roc_auc": 0.9829579850571781,
+        "pr_auc": 0.9785694710645899,
+        "recall_at_fpr_1pct": 0.7885089883679943,
+        "recall_at_fpr_0_1pct": 0.522382798731054,
+        "log_loss": 0.16510711994102908
+      },
+      "lexical+dns+rdap_no_existence": {
+        "roc_auc": 0.9908368905594056,
+        "pr_auc": 0.9881117081930694,
+        "recall_at_fpr_1pct": 0.8512513218188227,
+        "recall_at_fpr_0_1pct": 0.6446951004582305,
+        "log_loss": 0.12059179484511115
+      }
+    },
+    "recent_phish_7d": {
+      "n": 4281,
+      "n_phish": 281,
+      "lexical_only": {
+        "roc_auc": 0.9656103202846975,
+        "pr_auc": 0.79701975887093,
+        "recall_at_fpr_1pct": 0.6370106761565836,
+        "recall_at_fpr_0_1pct": 0.3167259786476868,
+        "log_loss": 0.12043935677740325
+      },
+      "lexical+dns+rdap": {
+        "roc_auc": 0.9790667259786477,
+        "pr_auc": 0.8850899893702531,
+        "recall_at_fpr_1pct": 0.797153024911032,
+        "recall_at_fpr_0_1pct": 0.47330960854092524,
+        "log_loss": 0.09703687524156586
+      },
+      "dns_status_of_recent_phish": {
+        "ok": 0.7864768683274022,
+        "nxdomain": 0.19572953736654805,
+        "nodata": 0.017793594306049824
+      }
+    },
+    "coverage": {
+      "rdap_ok_by_label": {
+        "0": {
+          "error:TimeoutError": 0,
+          "error:URLError": 12,
+          "http_403": 4,
+          "http_426": 2,
+          "http_429": 4,
+          "no_rdap_server": 580,
+          "not_found": 12,
+          "ok": 3211,
+          "skip": 0,
+          "skip_platform": 175
+        },
+        "1": {
+          "error:TimeoutError": 1,
+          "error:URLError": 13,
+          "http_403": 8,
+          "http_426": 1,
+          "http_429": 6,
+          "no_rdap_server": 202,
+          "not_found": 36,
+          "ok": 1602,
+          "skip": 1,
+          "skip_platform": 2130
+        }
+      },
+      "dns_status_by_label": {
+        "0": {
+          "nodata": 1,
+          "nxdomain": 6,
+          "ok": 3992,
+          "servfail": 1,
+          "skip": 0,
+          "timeout": 0
+        },
+        "1": {
+          "nodata": 56,
+          "nxdomain": 1040,
+          "ok": 2837,
+          "servfail": 60,
+          "skip": 1,
+          "timeout": 6
+        }
+      }
+    },
+    "feature_summary": {
+      "dns_ok": {
+        "legit_median": 1.0,
+        "phish_median": 1.0,
+        "legit_missing": 0.0,
+        "phish_missing": 0.00025
+      },
+      "dns_resolves": {
+        "legit_median": 1.0,
+        "phish_median": 1.0,
+        "legit_missing": 0.00025,
+        "phish_missing": 0.01675
+      },
+      "dns_nxdomain": {
+        "legit_median": 0.0,
+        "phish_median": 0.0,
+        "legit_missing": 0.00025,
+        "phish_missing": 0.01675
+      },
+      "dns_n_a": {
+        "legit_median": 2.0,
+        "phish_median": 2.0,
+        "legit_missing": 0.00025,
+        "phish_missing": 0.01675
+      },
+      "dns_has_aaaa": {
+        "legit_median": 1.0,
+        "phish_median": 0.0,
+        "legit_missing": 0.00025,
+        "phish_missing": 0.01675
+      },
+      "dns_has_cname": {
+        "legit_median": 0.0,
+        "phish_median": 0.0,
+        "legit_missing": 0.00025,
+        "phish_missing": 0.01675
+      },
+      "dns_ttl_a_log": {
+        "legit_median": 2.4785664955938436,
+        "phish_median": 2.4785664955938436,
+        "legit_missing": 0.002,
+        "phish_missing": 0.29075
+      },
+      "dns_private_ip": {
+        "legit_median": 0.0,
+        "phish_median": 0.0,
+        "legit_missing": 0.002,
+        "phish_missing": 0.29075
+      },
+      "dns_n_ns": {
+        "legit_median": 2.0,
+        "phish_median": 0.0,
+        "legit_missing": 0.0005,
+        "phish_missing": 0.01625
+      },
+      "dns_has_mx": {
+        "legit_median": 1.0,
+        "phish_median": 0.0,
+        "legit_missing": 0.00025,
+        "phish_missing": 0.02175
+      },
+      "rdap_ok": {
+        "legit_median": 1.0,
+        "phish_median": 1.0,
+        "legit_missing": 0.04375,
+        "phish_missing": 0.53275
+      },
+      "rdap_not_found": {
+        "legit_median": 0.0,
+        "phish_median": 0.0,
+        "legit_missing": 0.19425,
+        "phish_missing": 0.5905
+      },
+      "domain_age_days_log": {
+        "legit_median": 3.3941013020400446,
+        "phish_median": 1.1760912590556813,
+        "legit_missing": 0.35125,
+        "phish_missing": 0.6015
+      },
+      "days_to_expiry_log": {
+        "legit_median": 2.494154594018443,
+        "phish_median": 2.4578818967339924,
+        "legit_missing": 0.2075,
+        "phish_missing": 0.60225
+      },
+      "reg_period_years": {
+        "legit_median": 11.000684462696784,
+        "phish_median": 0.999315537303217,
+        "legit_missing": 0.2075,
+        "phish_missing": 0.60225
+      },
+      "days_since_changed_log": {
+        "legit_median": 2.0492180226701815,
+        "phish_median": 1.6532125137753437,
+        "legit_missing": 0.1975,
+        "phish_missing": 0.6
+      },
+      "status_hold": {
+        "legit_median": 0.0,
+        "phish_median": 1.0,
+        "legit_missing": 0.19725,
+        "phish_missing": 0.5995
+      },
+      "status_n": {
+        "legit_median": 1.0,
+        "phish_median": 2.0,
+        "legit_missing": 0.19725,
+        "phish_missing": 0.5995
+      },
+      "created_after_seen": {
+        "legit_median": 0.0,
+        "phish_median": 0.0,
+        "legit_missing": 0.35125,
+        "phish_missing": 0.6015
+      }
+    }
+  }
+}

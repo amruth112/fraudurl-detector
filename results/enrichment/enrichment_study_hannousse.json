@@ -1,0 +1,53 @@
+{
+  "hannousse": {
+    "lexical_only": {
+      "roc_auc": 0.9671263134460308,
+      "pr_auc": 0.9704245728101827,
+      "recall_at_fpr_1pct": 0.6970598529926496,
+      "recall_at_fpr_0_1pct": 0.4410220511025551,
+      "log_loss": 0.22897826122477036
+    },
+    "lexical+domain(whois,dns)": {
+      "roc_auc": 0.9791008623047076,
+      "pr_auc": 0.9801413787933443,
+      "recall_at_fpr_1pct": 0.771613580679034,
+      "recall_at_fpr_0_1pct": 0.42579628981449075,
+      "log_loss": 0.18174500008017724
+    },
+    "lexical+page_content": {
+      "roc_auc": 0.9829609765702635,
+      "pr_auc": 0.982304504880912,
+      "recall_at_fpr_1pct": 0.783689184459223,
+      "recall_at_fpr_0_1pct": 0.440322016100805,
+      "log_loss": 0.16534642958879034
+    },
+    "lexical+domain+page": {
+      "roc_auc": 0.9872623946157938,
+      "pr_auc": 0.9865443335193318,
+      "recall_at_fpr_1pct": 0.8167658382919146,
+      "recall_at_fpr_0_1pct": 0.4639481974098705,
+      "log_loss": 0.14282866217716855
+    },
+    "domain_only": {
+      "roc_auc": 0.7576963581337421,
+      "pr_auc": 0.7789682546126744,
+      "recall_at_fpr_1pct": 0.24606230311515576,
+      "recall_at_fpr_0_1pct": 0.055652782639131954,
+      "log_loss": 0.5998338829135638
+    },
+    "page_only": {
+      "roc_auc": 0.9207640456388523,
+      "pr_auc": 0.9157726183687015,
+      "recall_at_fpr_1pct": 0.2439621981099055,
+      "recall_at_fpr_0_1pct": 0.05950297514875744,
+      "log_loss": 0.3597076677849531
+    },
+    "lexical+domain+page+reputation(CIRCULAR)": {
+      "roc_auc": 0.9922791590148188,
+      "pr_auc": 0.9923641215086184,
+      "recall_at_fpr_1pct": 0.8865943297164858,
+      "recall_at_fpr_0_1pct": 0.48914945747287364,
+      "log_loss": 0.10932252017655035
+    }
+  }
+}

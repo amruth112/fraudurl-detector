@@ -1,0 +1,60 @@
+{
+  "all": {
+    "base_url_model_alone": {
+      "roc_auc": 0.9250869375,
+      "pr_auc": 0.9201899303219269,
+      "recall_at_fpr_1pct": 0.37125,
+      "recall_at_fpr_0_1pct": 0.119
+    },
+    "A_single_lgbm_lexical+enrich": {
+      "roc_auc": 0.993376875,
+      "pr_auc": 0.9937596495528792,
+      "recall_at_fpr_1pct": 0.88725,
+      "recall_at_fpr_0_1pct": 0.76175,
+      "log_loss": 0.10469156521868889
+    },
+    "A0_single_lgbm_lexical_only": {
+      "roc_auc": 0.98139,
+      "pr_auc": 0.98257005919035,
+      "recall_at_fpr_1pct": 0.772,
+      "recall_at_fpr_0_1pct": 0.52125,
+      "log_loss": 0.1752746978547464
+    },
+    "B_stack_base+enrich": {
+      "roc_auc": 0.98089259375,
+      "pr_auc": 0.979511836696578,
+      "recall_at_fpr_1pct": 0.686,
+      "recall_at_fpr_0_1pct": 0.2475,
+      "log_loss": 0.172825926212326
+    }
+  },
+  "live_only": {
+    "base_url_model_alone": {
+      "roc_auc": 0.9381334046309043,
+      "pr_auc": 0.9130605919550971,
+      "recall_at_fpr_1pct": 0.4078251674303842,
+      "recall_at_fpr_0_1pct": 0.03771589707437434
+    },
+    "A_single_lgbm_lexical+enrich": {
+      "roc_auc": 0.9902905917580666,
+      "pr_auc": 0.9873805889984051,
+      "recall_at_fpr_1pct": 0.8452590764892493,
+      "recall_at_fpr_0_1pct": 0.6164962989072964,
+      "log_loss": 0.1241775066892977
+    },
+    "A0_single_lgbm_lexical_only": {
+      "roc_auc": 0.9820022491228492,
+      "pr_auc": 0.9776755911816606,
+      "recall_at_fpr_1pct": 0.7811068029608742,
+      "recall_at_fpr_0_1pct": 0.5745505816002819,
+      "log_loss": 0.16962690943551828
+    },
+    "B_stack_base+enrich": {
+      "roc_auc": 0.9753303310886842,
+      "pr_auc": 0.9617144600375743,
+      "recall_at_fpr_1pct": 0.6161438138879097,
+      "recall_at_fpr_0_1pct": 0.04652802255904124,
+      "log_loss": 0.19441925290058432
+    }
+  }
+}

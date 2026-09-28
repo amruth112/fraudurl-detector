@@ -1,0 +1,30 @@
+name: Bug report
+description: The tool crashed, hung, misread a file or produced a broken output.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Security problems go to **Security → Report a vulnerability**, not here (see SECURITY.md).
+        Defang any URL you paste (`hxxps://evil[.]example`).
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to reproduce
+      description: The exact command and a minimal input file (use example.com / .test / .invalid names).
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      placeholder: "fraudurl 1.0.0, Python 3.12, Windows 11"
+    validations:
+      required: true

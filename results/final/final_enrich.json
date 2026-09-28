@@ -1,0 +1,37 @@
+{
+  "n_live_non_platform": 4523,
+  "phish_share": 0.16559805438868008,
+  "row_counts": {
+    "live": 6829,
+    "platform_excluded": 2306,
+    "kept": 4523
+  },
+  "live_only": {
+    "safe_only_uncalibrated": {
+      "roc_auc": 0.9479567527945759,
+      "pr_auc": 0.8137134828749277,
+      "recall_at_fpr_1pct": 0.43391188251001334,
+      "recall_at_fpr_0_1pct": 0.1548731642189586
+    },
+    "safe+enrichment_uncalibrated": {
+      "roc_auc": 0.9624130531222339,
+      "pr_auc": 0.8689335947491788,
+      "recall_at_fpr_1pct": 0.5794392523364486,
+      "recall_at_fpr_0_1pct": 0.22162883845126835
+    }
+  },
+  "model_file": "fraudurl/data/model_enrich.json",
+  "model_bytes": 72031,
+  "calibration": "platt",
+  "thresholds": {
+    "fraud": 0.9228930475488746,
+    "legit": 0.12471439983607555
+  },
+  "n_trees": 150,
+  "calibration_prior_shift": {
+    "from_base_rate": 0.16559805438868008,
+    "to_base_rate": 0.4711891506613912,
+    "logit_shift": 1.501780544340838,
+    "why": "report enriched probabilities at the same reference prevalence as the safe model; monotone, error rates unchanged"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "n_per_class": 500,
+  "status_share_by_label": {
+    "0": {
+      "nodata": 0.0,
+      "nxdomain": 0.0,
+      "ok": 1.0,
+      "servfail": 0.0,
+      "skip": 0.0,
+      "timeout": 0.0
+    },
+    "1": {
+      "nodata": 0.006,
+      "nxdomain": 0.444,
+      "ok": 0.532,
+      "servfail": 0.01,
+      "skip": 0.004,
+      "timeout": 0.004
+    }
+  },
+  "roc_auc_of_single_feature_does_not_resolve_today": 0.7291242362525459
+}

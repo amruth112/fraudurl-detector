@@ -1,0 +1,48 @@
+{
+  "dataset": "fresh26e",
+  "n_urls": 8000,
+  "n_hosts": 7575,
+  "n_regs": 5058,
+  "seconds": 68.10131430625916,
+  "observed_at": "2026-09-25T16:52:31.214219+00:00",
+  "dns_status_by_label": {
+    "0": {
+      "nodata": 1,
+      "nxdomain": 6,
+      "ok": 3992,
+      "servfail": 1,
+      "skip": 0,
+      "timeout": 0
+    },
+    "1": {
+      "nodata": 56,
+      "nxdomain": 1040,
+      "ok": 2837,
+      "servfail": 61,
+      "skip": 1,
+      "timeout": 5
+    }
+  },
+  "rdap_status_by_label": {
+    "0": {
+      "error:URLError": 12,
+      "http_426": 2,
+      "http_429": 4,
+      "no_rdap_server": 580,
+      "not_found": 12,
+      "ok": 3215,
+      "skip": 0,
+      "skip_platform": 175
+    },
+    "1": {
+      "error:URLError": 13,
+      "http_426": 1,
+      "http_429": 0,
+      "no_rdap_server": 202,
+      "not_found": 36,
+      "ok": 1617,
+      "skip": 1,
+      "skip_platform": 2130
+    }
+  }
+}

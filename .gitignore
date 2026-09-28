@@ -1,0 +1,45 @@
+# ---- never publish: research environment, downloaded data, third-party clone
+/data/
+/.cache/
+/.venv/
+/laya_repo/
+/env.sh
+
+# ---- Python build and test artefacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+/build/
+/dist/
+.pytest_cache/
+.coverage
+htmlcov/
+.ruff_cache/
+.mypy_cache/
+
+# ---- output and lookup cache when the tool is run inside the repo
+.fraudurl_cache/
+*.fraudurl.csv
+*.fraudurl.jsonl
+!/examples/*.fraudurl.csv
+
+# ---- large or per-URL experiment outputs (third-party URL lists; kept locally only)
+/results/**/*.npz
+/results/**/*.pkl
+/results/models/
+/results/benchmark/output_audit_1m.json
+/results/benchmark/standalone_equivalence.json
+/experiments/logs/
+
+# ---- machine-specific helper scripts and internal working notes
+/experiments/*.sh
+/docs/research/
+/docs/report_draft_sections.md
+
+# ---- OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp

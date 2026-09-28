@@ -1,0 +1,2 @@
+["tld_logit", "path_len", "sub_len", "url_entropy", "n_dot", "scheme_http", "sus_words_path", "n_qmark",
+ "host_len", "path_max_seg_len", "letter_ratio", "n_hyphen"]

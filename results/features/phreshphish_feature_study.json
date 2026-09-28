@@ -1,0 +1,698 @@
+{
+  "dataset": "phreshphish",
+  "n_features": 82,
+  "all_features_val": {
+    "auc": 0.9895586668805277,
+    "recall_at_1pct_fpr": 0.9010806317539485
+  },
+  "group_alone": {
+    "scheme": {
+      "n": 1,
+      "auc": 0.5801611814328801,
+      "recall_at_1pct_fpr": 0.1693135582097388
+    },
+    "lengths_counts": {
+      "n": 23,
+      "auc": 0.939895812650948,
+      "recall_at_1pct_fpr": 0.6015225095156844
+    },
+    "char_composition": {
+      "n": 11,
+      "auc": 0.9295476194304935,
+      "recall_at_1pct_fpr": 0.45067156669729186
+    },
+    "host_structure": {
+      "n": 17,
+      "auc": 0.8948909416870617,
+      "recall_at_1pct_fpr": 0.46475915474471713
+    },
+    "domain_shape": {
+      "n": 11,
+      "auc": 0.9303722102337159,
+      "recall_at_1pct_fpr": 0.7256857855361596
+    },
+    "hosting_platform": {
+      "n": 3,
+      "auc": 0.7174450851314315,
+      "recall_at_1pct_fpr": 0.44047775298595615
+    },
+    "path_semantics": {
+      "n": 8,
+      "auc": 0.7358538394051055,
+      "recall_at_1pct_fpr": 0.03276895480596754
+    },
+    "brand_keywords": {
+      "n": 8,
+      "auc": 0.7272932922486862,
+      "recall_at_1pct_fpr": 0.15133219582622393
+    }
+  },
+  "group_removed": {
+    "scheme": {
+      "auc": 0.9880374651069371,
+      "delta_auc": -0.001521201773590608,
+      "recall_at_1pct_fpr": 0.8734742092138076,
+      "delta_recall": -0.027606422540140896
+    },
+    "lengths_counts": {
+      "auc": 0.985667287024782,
+      "delta_auc": -0.0038913798557457246,
+      "recall_at_1pct_fpr": 0.8603928774554841,
+      "delta_recall": -0.040687754298464385
+    },
+    "char_composition": {
+      "auc": 0.9879309327667328,
+      "delta_auc": -0.0016277341137949097,
+      "recall_at_1pct_fpr": 0.8857680360502254,
+      "delta_recall": -0.01531259570372312
+    },
+    "host_structure": {
+      "auc": 0.9879173028361871,
+      "delta_auc": -0.0016413640443406763,
+      "recall_at_1pct_fpr": 0.891368071050444,
+      "delta_recall": -0.009712560703504458
+    },
+    "domain_shape": {
+      "auc": 0.9851748720170659,
+      "delta_auc": -0.004383794863461854,
+      "recall_at_1pct_fpr": 0.8355427221420134,
+      "delta_recall": -0.06553790961193506
+    },
+    "hosting_platform": {
+      "auc": 0.9896082776731726,
+      "delta_auc": 4.961079264487189e-05,
+      "recall_at_1pct_fpr": 0.8987618672616704,
+      "delta_recall": -0.0023187644922780803
+    },
+    "path_semantics": {
+      "auc": 0.989011509351332,
+      "delta_auc": -0.0005471575291957631,
+      "recall_at_1pct_fpr": 0.8935993349958438,
+      "delta_recall": -0.007481296758104716
+    },
+    "brand_keywords": {
+      "auc": 0.9882985597659387,
+      "delta_auc": -0.0012601071145890153,
+      "recall_at_1pct_fpr": 0.8910180688629304,
+      "delta_recall": -0.010062562891018034
+    }
+  },
+  "without_format_sensitive": {
+    "removed": [
+      "scheme_http",
+      "www_prefix",
+      "is_homepage"
+    ],
+    "auc": 0.9877289925449364,
+    "recall_at_1pct_fpr": 0.8676116725729536
+  },
+  "permutation_importance_auc_drop": {
+    "tld_logit": 0.04304389847332801,
+    "path_len": 0.03549065549720409,
+    "private_suffix": 0.009303497931968607,
+    "scheme_http": 0.005377045549714743,
+    "www_prefix": 0.0050115608514299526,
+    "n_slash": 0.002830083979436515,
+    "url_entropy": 0.002447793848554647,
+    "path_max_seg_len": 0.0018976860649475569,
+    "n_qmark": 0.0016737825660506633,
+    "sus_words_path": 0.0015890617056244505,
+    "sub_len": 0.0012164449815303957,
+    "n_dot": 0.0011697411892214182,
+    "upper_ratio": 0.0011503674438629874,
+    "path_entropy": 0.0011483638824301146,
+    "n_hyphen": 0.0008899779079074577,
+    "digit_ratio": 0.0006937537530254945,
+    "path_depth": 0.0006381396211138091,
+    "user_content_host": 0.000611313933008617,
+    "sld_len": 0.0005874931789953131,
+    "ext_page": 0.0005309388830224693,
+    "n_sub_labels": 0.0005268868738516064,
+    "host_n_hyphens": 0.0004357423751207845,
+    "wp_path": 0.00043182992155288424,
+    "host_entropy": 0.00043046537788049566,
+    "n_underscore": 0.00040586849884782783,
+    "is_homepage": 0.00040010020059622065,
+    "sld_vowel_ratio": 0.00036936450726710035,
+    "path_digit_ratio": 0.00036514437848123027,
+    "embedded_url": 0.0002885969061405813,
+    "url_len": 0.00028818884882231277,
+    "brand_in_path": 0.00028756288889608683,
+    "special_ratio": 0.0002590209117100395,
+    "letter_ratio": 0.00020891473748096967,
+    "ext_server": 0.0001974646491292864,
+    "brand_in_sub": 0.00018629367198352842,
+    "sld_entropy": 0.0001766357713736122,
+    "sld_n_hyphens": 0.00017054102726765663,
+    "n_equal": 0.0001573583275427115,
+    "host_len": 0.00014431436730577563,
+    "brand_in_sld_not_equal": 0.00013636541074513175,
+    "host_n_digits": 0.0001324407154575935,
+    "query_len": 0.00012857314819481047,
+    "host_max_label_len": 0.0001279520849563065,
+    "sld_max_consonant_run": 0.00010611775396862644,
+    "sld_n_digits": 0.00010147651003011848,
+    "suffix_n_labels": 9.961903311728193e-05,
+    "tld_len": 9.167497324447105e-05,
+    "n_host_tokens": 8.804489534097737e-05,
+    "host_n_labels": 8.328857923878275e-05,
+    "n_at": 7.559506655951953e-05,
+    "n_percent": 6.730497408080627e-05,
+    "host_digit_ratio": 6.670349759352323e-05,
+    "sus_words_host": 5.5561900574652157e-05,
+    "brand_typo": 4.904604131605872e-05,
+    "sld_digit_letter_switches": 4.439337177264413e-05,
+    "n_params": 3.925021733275358e-05,
+    "has_port": 3.4968879949137666e-05,
+    "brand_is_sld": 3.42164222542074e-05,
+    "double_slash_in_path": 2.3074825235225305e-05,
+    "n_tilde": 2.2890383327478503e-05,
+    "sld_max_digit_run": 1.8617207090065868e-05,
+    "n_pct_encoded": 5.484290357737898e-06,
+    "host_punycode": 3.447268224987532e-06,
+    "n_exclaim": 3.0669588042542273e-06,
+    "shortener": 1.7742332198977806e-06,
+    "sub_has_hyphen": 1.6403904194994823e-06,
+    "port_nonstd": 1.2355975597122537e-06,
+    "has_userinfo": 0.0,
+    "n_amp": 0.0,
+    "n_semicolon": 0.0,
+    "n_plus": 0.0,
+    "n_hash": 0.0,
+    "n_comma": 0.0,
+    "n_star": 0.0,
+    "n_dollar": 0.0,
+    "non_ascii": 0.0,
+    "redirect_param": 0.0,
+    "host_is_ip": 0.0,
+    "host_is_ipv6": 0.0,
+    "host_invalid_chars": 0.0,
+    "ext_risky": 0.0,
+    "sub_has_digit": -8.56757145528686e-06
+  },
+  "gain_importance_share": {
+    "tld_logit": 0.4473716403917833,
+    "n_slash": 0.08089493651793031,
+    "www_prefix": 0.07831207288699779,
+    "path_len": 0.06481012816092656,
+    "private_suffix": 0.049332332651105724,
+    "scheme_http": 0.03620524556023226,
+    "url_entropy": 0.02626811517956825,
+    "n_qmark": 0.019802994096262908,
+    "path_max_seg_len": 0.014567395404293195,
+    "digit_ratio": 0.011971677420934744,
+    "special_ratio": 0.009430962399166659,
+    "path_entropy": 0.008587451744239676,
+    "host_n_hyphens": 0.00857271646600391,
+    "n_dot": 0.008473573936413422,
+    "host_entropy": 0.008277441786762528,
+    "sub_len": 0.008119461166085752,
+    "n_equal": 0.007203369078728624,
+    "upper_ratio": 0.006926521439585844,
+    "query_len": 0.00684949569403305,
+    "wp_path": 0.006428519225105664,
+    "sld_len": 0.006422008976351676,
+    "path_depth": 0.006204409493565661,
+    "n_hyphen": 0.005863292234509381,
+    "sus_words_path": 0.004871213118997059,
+    "sld_vowel_ratio": 0.004838585095999195,
+    "sld_entropy": 0.004667613602889845,
+    "path_digit_ratio": 0.0043456726308610865,
+    "sld_n_hyphens": 0.004186808117639779,
+    "host_len": 0.003524337336326938,
+    "host_max_label_len": 0.003488513491244128,
+    "host_n_digits": 0.0033416041784141096,
+    "letter_ratio": 0.003040165142327806,
+    "embedded_url": 0.002879332286101168,
+    "n_sub_labels": 0.002839127677486259,
+    "tld_len": 0.0028339983438993572,
+    "url_len": 0.0026036147288935486,
+    "brand_in_path": 0.0025959757469501536,
+    "ext_page": 0.0025352956424272233,
+    "host_digit_ratio": 0.0020431078512633126,
+    "sld_max_consonant_run": 0.0020375254356897452,
+    "n_params": 0.001757580643390987,
+    "sld_n_digits": 0.0013777424045138859,
+    "brand_in_sub": 0.0013325987228142635,
+    "n_underscore": 0.0011752552600209942,
+    "ext_server": 0.0011697118414779844,
+    "is_homepage": 0.0011621681548675458,
+    "n_host_tokens": 0.001090324098094856,
+    "brand_in_sld_not_equal": 0.0009745540465386275,
+    "host_n_labels": 0.0008123799659810509,
+    "n_at": 0.0007905882758465856,
+    "suffix_n_labels": 0.0007877560121236372,
+    "user_content_host": 0.0006676205188640253,
+    "sus_words_host": 0.0005069700730929679,
+    "sld_max_digit_run": 0.0005008803424852446,
+    "has_port": 0.0003923499179130739,
+    "sld_digit_letter_switches": 0.0003129199108795023,
+    "brand_is_sld": 0.0003001337511158074,
+    "sub_has_digit": 0.0002908265850129495,
+    "double_slash_in_path": 0.00023720514312022017,
+    "host_punycode": 0.00020293604325128937,
+    "n_percent": 0.0001888228939078385,
+    "n_exclaim": 0.00012254209205328622,
+    "brand_typo": 8.439039876691925e-05,
+    "n_tilde": 6.254514861101903e-05,
+    "sub_has_hyphen": 5.49372643963788e-05,
+    "shortener": 3.301567176760024e-05,
+    "port_nonstd": 2.1935279031117682e-05,
+    "n_pct_encoded": 2.10572020627826e-05,
+    "n_hash": 0.0,
+    "n_semicolon": 0.0,
+    "has_userinfo": 0.0,
+    "n_plus": 0.0,
+    "n_amp": 0.0,
+    "redirect_param": 0.0,
+    "host_is_ipv6": 0.0,
+    "host_invalid_chars": 0.0,
+    "host_is_ip": 0.0,
+    "n_dollar": 0.0,
+    "n_star": 0.0,
+    "n_comma": 0.0,
+    "non_ascii": 0.0,
+    "ext_risky": 0.0
+  },
+  "forward_selection": [
+    {
+      "k": 1,
+      "added": "tld_logit",
+      "val_auc": 0.8636373460900015,
+      "val_recall_at_1pct_fpr": 0.5773723585772411
+    },
+    {
+      "k": 2,
+      "added": "path_len",
+      "val_auc": 0.9335848136722469,
+      "val_recall_at_1pct_fpr": 0.6842980268626679
+    },
+    {
+      "k": 3,
+      "added": "sub_len",
+      "val_auc": 0.9582055371262725,
+      "val_recall_at_1pct_fpr": 0.7003543772148576
+    },
+    {
+      "k": 4,
+      "added": "url_entropy",
+      "val_auc": 0.9708744306629232,
+      "val_recall_at_1pct_fpr": 0.7758673491709324
+    },
+    {
+      "k": 5,
+      "added": "n_dot",
+      "val_auc": 0.9776213409524751,
+      "val_recall_at_1pct_fpr": 0.8062300389377434
+    },
+    {
+      "k": 6,
+      "added": "scheme_http",
+      "val_auc": 0.9806314802236131,
+      "val_recall_at_1pct_fpr": 0.8360677254232839
+    },
+    {
+      "k": 7,
+      "added": "sus_words_path",
+      "val_auc": 0.9822907220751835,
+      "val_recall_at_1pct_fpr": 0.8350177188607428
+    },
+    {
+      "k": 8,
+      "added": "n_qmark",
+      "val_auc": 0.9833259496177702,
+      "val_recall_at_1pct_fpr": 0.851161569759811
+    },
+    {
+      "k": 9,
+      "added": "n_hyphen",
+      "val_auc": 0.9842791486621167,
+      "val_recall_at_1pct_fpr": 0.8522990768692305
+    },
+    {
+      "k": 10,
+      "added": "path_depth",
+      "val_auc": 0.9852469373878222,
+      "val_recall_at_1pct_fpr": 0.8591241195257471
+    },
+    {
+      "k": 11,
+      "added": "host_n_digits",
+      "val_auc": 0.9857950171265575,
+      "val_recall_at_1pct_fpr": 0.8586428665179158
+    },
+    {
+      "k": 12,
+      "added": "host_max_label_len",
+      "val_auc": 0.9862483720716508,
+      "val_recall_at_1pct_fpr": 0.8692304326902043
+    },
+    {
+      "k": 13,
+      "added": "path_digit_ratio",
+      "val_auc": 0.9864727203530247,
+      "val_recall_at_1pct_fpr": 0.8715054469090432
+    },
+    {
+      "k": 14,
+      "added": "www_prefix",
+      "val_auc": 0.9871307633778965,
+      "val_recall_at_1pct_fpr": 0.8760117250732817
+    },
+    {
+      "k": 15,
+      "added": "upper_ratio",
+      "val_auc": 0.9875600176416564,
+      "val_recall_at_1pct_fpr": 0.880036750229689
+    },
+    {
+      "k": 16,
+      "added": "sld_n_hyphens",
+      "val_auc": 0.9875197660516642,
+      "val_recall_at_1pct_fpr": 0.8812617578859868
+    },
+    {
+      "k": 17,
+      "added": "n_equal",
+      "val_auc": 0.9876505019036461,
+      "val_recall_at_1pct_fpr": 0.8792492453077831
+    },
+    {
+      "k": 18,
+      "added": "private_suffix",
+      "val_auc": 0.9880225195995969,
+      "val_recall_at_1pct_fpr": 0.8875617972612329
+    },
+    {
+      "k": 19,
+      "added": "n_slash",
+      "val_auc": 0.9881214579931074,
+      "val_recall_at_1pct_fpr": 0.8878242989018681
+    },
+    {
+      "k": 20,
+      "added": "wp_path",
+      "val_auc": 0.9882878817220334,
+      "val_recall_at_1pct_fpr": 0.8881305508159426
+    }
+  ],
+  "redundant_pairs_spearman_gt_0.9": [
+    [
+      "n_slash",
+      "path_depth",
+      0.9048558876720528
+    ],
+    [
+      "path_len",
+      "path_max_seg_len",
+      0.9592811544757456
+    ],
+    [
+      "path_len",
+      "path_entropy",
+      0.9568447620062365
+    ],
+    [
+      "n_qmark",
+      "query_len",
+      0.9960643217092772
+    ],
+    [
+      "path_max_seg_len",
+      "path_entropy",
+      0.9404445183166479
+    ],
+    [
+      "host_n_hyphens",
+      "sld_n_hyphens",
+      0.9355983624991473
+    ],
+    [
+      "sld_len",
+      "host_max_label_len",
+      0.9264127478579551
+    ]
+  ],
+  "test_compact": {
+    "forward_top1": {
+      "n_features": 1,
+      "features": [
+        "tld_logit"
+      ],
+      "roc_auc": 0.8609255562978436,
+      "pr_auc": 0.8460470537367704,
+      "recall_at_fpr_1pct": 0.5528919582973637,
+      "recall_at_fpr_0_1pct": 0.2660645903889147,
+      "best_iteration": 81
+    },
+    "forward_top2": {
+      "n_features": 2,
+      "features": [
+        "tld_logit",
+        "path_len"
+      ],
+      "roc_auc": 0.9333878931424414,
+      "pr_auc": 0.9362739821684043,
+      "recall_at_fpr_1pct": 0.6757863514620271,
+      "recall_at_fpr_0_1pct": 0.4502733691922881,
+      "best_iteration": 145
+    },
+    "forward_top3": {
+      "n_features": 3,
+      "features": [
+        "tld_logit",
+        "path_len",
+        "sub_len"
+      ],
+      "roc_auc": 0.9570295191918816,
+      "pr_auc": 0.957136707725635,
+      "recall_at_fpr_1pct": 0.6949553976581003,
+      "recall_at_fpr_0_1pct": 0.5205746286827367,
+      "best_iteration": 366
+    },
+    "forward_top5": {
+      "n_features": 5,
+      "features": [
+        "tld_logit",
+        "path_len",
+        "sub_len",
+        "url_entropy",
+        "n_dot"
+      ],
+      "roc_auc": 0.9777005753218946,
+      "pr_auc": 0.9784224093075721,
+      "recall_at_fpr_1pct": 0.8101024857781615,
+      "recall_at_fpr_0_1pct": 0.6861677402217943,
+      "best_iteration": 515
+    },
+    "forward_top8": {
+      "n_features": 8,
+      "features": [
+        "tld_logit",
+        "path_len",
+        "sub_len",
+        "url_entropy",
+        "n_dot",
+        "scheme_http",
+        "sus_words_path",
+        "n_qmark"
+      ],
+      "roc_auc": 0.98305130989803,
+      "pr_auc": 0.9839746317673087,
+      "recall_at_fpr_1pct": 0.861168293600726,
+      "recall_at_fpr_0_1pct": 0.7193483409699626,
+      "best_iteration": 543
+    },
+    "forward_top10": {
+      "n_features": 10,
+      "features": [
+        "tld_logit",
+        "path_len",
+        "sub_len",
+        "url_entropy",
+        "n_dot",
+        "scheme_http",
+        "sus_words_path",
+        "n_qmark",
+        "n_hyphen",
+        "path_depth"
+      ],
+      "roc_auc": 0.9854279992300939,
+      "pr_auc": 0.9861054356825214,
+      "recall_at_fpr_1pct": 0.8720366558204397,
+      "recall_at_fpr_0_1pct": 0.7268300241273215,
+      "best_iteration": 873
+    },
+    "forward_top12": {
+      "n_features": 12,
+      "features": [
+        "tld_logit",
+        "path_len",
+        "sub_len",
+        "url_entropy",
+        "n_dot",
+        "scheme_http",
+        "sus_words_path",
+        "n_qmark",
+        "n_hyphen",
+        "path_depth",
+        "host_n_digits",
+        "host_max_label_len"
+      ],
+      "roc_auc": 0.9860039437887307,
+      "pr_auc": 0.9867054813412809,
+      "recall_at_fpr_1pct": 0.8793633928769063,
+      "recall_at_fpr_0_1pct": 0.7425017154746885,
+      "best_iteration": 550
+    },
+    "forward_top16": {
+      "n_features": 16,
+      "features": [
+        "tld_logit",
+        "path_len",
+        "sub_len",
+        "url_entropy",
+        "n_dot",
+        "scheme_http",
+        "sus_words_path",
+        "n_qmark",
+        "n_hyphen",
+        "path_depth",
+        "host_n_digits",
+        "host_max_label_len",
+        "path_digit_ratio",
+        "www_prefix",
+        "upper_ratio",
+        "sld_n_hyphens"
+      ],
+      "roc_auc": 0.9872336898943443,
+      "pr_auc": 0.9881481872284917,
+      "recall_at_fpr_1pct": 0.8951457600106248,
+      "recall_at_fpr_0_1pct": 0.7671160103592536,
+      "best_iteration": 1043
+    },
+    "forward_top20": {
+      "n_features": 20,
+      "features": [
+        "tld_logit",
+        "path_len",
+        "sub_len",
+        "url_entropy",
+        "n_dot",
+        "scheme_http",
+        "sus_words_path",
+        "n_qmark",
+        "n_hyphen",
+        "path_depth",
+        "host_n_digits",
+        "host_max_label_len",
+        "path_digit_ratio",
+        "www_prefix",
+        "upper_ratio",
+        "sld_n_hyphens",
+        "n_equal",
+        "private_suffix",
+        "n_slash",
+        "wp_path"
+      ],
+      "roc_auc": 0.988609344083929,
+      "pr_auc": 0.9894092993747775,
+      "recall_at_fpr_1pct": 0.9030701463133896,
+      "recall_at_fpr_0_1pct": 0.7849126768045687,
+      "best_iteration": 1411
+    },
+    "all": {
+      "n_features": 82,
+      "features": [
+        "url_len",
+        "scheme_http",
+        "has_userinfo",
+        "n_at",
+        "has_port",
+        "port_nonstd",
+        "n_dot",
+        "n_hyphen",
+        "n_underscore",
+        "n_slash",
+        "n_qmark",
+        "n_equal",
+        "n_amp",
+        "n_semicolon",
+        "n_tilde",
+        "n_percent",
+        "n_plus",
+        "n_hash",
+        "n_comma",
+        "n_exclaim",
+        "n_star",
+        "n_dollar",
+        "digit_ratio",
+        "letter_ratio",
+        "upper_ratio",
+        "special_ratio",
+        "url_entropy",
+        "n_pct_encoded",
+        "non_ascii",
+        "double_slash_in_path",
+        "embedded_url",
+        "n_params",
+        "redirect_param",
+        "host_len",
+        "host_n_labels",
+        "n_sub_labels",
+        "sub_len",
+        "www_prefix",
+        "host_n_hyphens",
+        "host_n_digits",
+        "host_digit_ratio",
+        "host_is_ip",
+        "host_is_ipv6",
+        "host_punycode",
+        "host_invalid_chars",
+        "host_entropy",
+        "host_max_label_len",
+        "sub_has_digit",
+        "sub_has_hyphen",
+        "sld_len",
+        "sld_entropy",
+        "sld_n_digits",
+        "sld_n_hyphens",
+        "sld_vowel_ratio",
+        "sld_max_consonant_run",
+        "sld_max_digit_run",
+        "sld_digit_letter_switches",
+        "tld_len",
+        "suffix_n_labels",
+        "private_suffix",
+        "user_content_host",
+        "shortener",
+        "path_len",
+        "path_depth",
+        "path_max_seg_len",
+        "path_digit_ratio",
+        "path_entropy",
+        "query_len",
+        "ext_server",
+        "ext_page",
+        "ext_risky",
+        "is_homepage",
+        "sus_words_host",
+        "sus_words_path",
+        "wp_path",
+        "brand_is_sld",
+        "brand_in_sld_not_equal",
+        "brand_in_sub",
+        "brand_in_path",
+        "brand_typo",
+        "n_host_tokens",
+        "tld_logit"
+      ],
+      "roc_auc": 0.9897716517956554,
+      "pr_auc": 0.9904259081384647,
+      "recall_at_fpr_1pct": 0.910596099785289,
+      "recall_at_fpr_0_1pct": 0.8032848573389114,
+      "best_iteration": 815
+    }
+  },
+  "seconds": 2012.4448173046112
+}
