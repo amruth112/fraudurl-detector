@@ -40,7 +40,8 @@ Commit the rebuilt file together with your change.
    from it. Update `version` and `date-released` in `CITATION.cff` and the title of `MODEL_CARD.md`.
 3. Push to `main` and wait for CI to pass, including the "PyPI package and project page" job.
 4. Push the tag `vX.Y.Z`. `release.yml` tests, builds, creates the GitHub release and starts
-   `publish-pypi.yml`, which uploads those exact files to PyPI through trusted publishing.
+   `publish-pypi.yml`. Check the GitHub release, then approve the waiting run (environment `pypi`); it
+   uploads those exact files to PyPI through trusted publishing.
 5. If the upload fails, fix the cause and re-run `publish-pypi.yml` from the tag. Never delete or rebuild a
    release once any of its files is on PyPI: a version can be uploaded only once.
 

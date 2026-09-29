@@ -4,6 +4,7 @@ name: Publish to PyPI
 # same files (the same SHA256SUMS). release.yml starts this after it creates a release. To run it by hand:
 # Actions -> Publish to PyPI -> Run workflow, choose the tag under "Use workflow from" and enter the same tag.
 # Never delete or rebuild a release once any of its files is on PyPI; re-run this workflow instead.
+# The GitHub environment "pypi" only accepts v* tags and waits for the maintainer's approval before uploading.
 #
 # PyPI side, set up once (trusted publishing, so no password or token is stored anywhere):
 #   project fraudurl, owner amruth112, repository fraudurl-detector, workflow publish-pypi.yml, environment pypi
