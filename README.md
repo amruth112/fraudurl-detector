@@ -11,6 +11,7 @@
 probability and plain-English reasons. Free, open source, one Python file.<br>
 Website: <a href="https://amruth112.github.io/fraudurl-detector/"><b>amruth112.github.io/fraudurl-detector</b></a></p>
 
+[![PyPI](https://img.shields.io/pypi/v/fraudurl?color=2a78d6&label=PyPI)](https://pypi.org/project/fraudurl/)
 [![CI](https://github.com/amruth112/fraudurl-detector/actions/workflows/ci.yml/badge.svg)](https://github.com/amruth112/fraudurl-detector/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-2a78d6.svg)](LICENSE)
 ![Python 3.9 to 3.14](https://img.shields.io/badge/python-3.9%20%E2%80%93%203.14-2a78d6.svg)
@@ -67,10 +68,10 @@ free-hosting addresses, risky domain endings, `http://` and random-looking names
 python fraudurl_standalone.py my_urls.csv          # writes my_urls.fraudurl.csv
 ```
 
-**Option 2: install the package.**
+**Option 2: install the package from [PyPI](https://pypi.org/project/fraudurl/).**
 
 ```bash
-pip install git+https://github.com/amruth112/fraudurl-detector
+pip install fraudurl
 fraudurl my_urls.csv
 fraudurl --url "http://paypal.com.secure-login.test/webscr/login.php" --quiet   # one URL -> JSON
 ```
