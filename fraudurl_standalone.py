@@ -32,14 +32,14 @@ What happens to each URL (full plain-English explanation: HOW_IT_WORKS.md in the
   7. the original rows are written back with 8 result columns added.
 
 For developers: this file is generated from the fraudurl/ package by
-experiments/build_single_file.py (fraudurl 1.0.0, source sha256 3facbc619689812a).
+experiments/build_single_file.py (fraudurl 1.0.1, source sha256 4753574cd04fc8e4).
 Do not edit it by hand; edit the package and rebuild.
 """
 from __future__ import annotations
 
 import io
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 
 def _embedded_text(name: str) -> str:

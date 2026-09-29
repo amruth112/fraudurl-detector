@@ -1,32 +1,70 @@
 name: Publish to PyPI
 
-# Run by hand (Actions -> Publish to PyPI -> Run workflow) once the PyPI "trusted publisher" is set up:
-# pypi.org -> Your account -> Publishing -> Add a pending publisher:
-#   project name: fraudurl, owner: amruth112, repository: fraudurl-detector,
-#   workflow: publish-pypi.yml, environment: pypi
+# Uploads the wheel and the sdist attached to a GitHub release, unchanged, so PyPI and the release carry the
+# same files (the same SHA256SUMS). release.yml starts this after it creates a release. To run it by hand:
+# Actions -> Publish to PyPI -> Run workflow, choose the tag under "Use workflow from" and enter the same tag.
+# Never delete or rebuild a release once any of its files is on PyPI; re-run this workflow instead.
+#
+# PyPI side, set up once (trusted publishing, so no password or token is stored anywhere):
+#   project fraudurl, owner amruth112, repository fraudurl-detector, workflow publish-pypi.yml, environment pypi
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to publish, for example v1.0.1"
+        required: true
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: pypi
+  cancel-in-progress: false
+
 jobs:
   publish:
     runs-on: ubuntu-latest
-    environment: pypi
+    timeout-minutes: 15
+    environment:
+      name: pypi
+      url: https://pypi.org/project/fraudurl/
     permissions:
-      id-token: write
+      contents: read
+      id-token: write          # trusted publishing
     steps:
-      - uses: actions/checkout@v5
+      - name: Download the release's wheel and sdist, and check them against its SHA256SUMS
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = "refs/tags/$TAG" || { echo "run this from the tag $TAG (Use workflow from)"; exit 1; }
+          mkdir dist
+          cd dist
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" \
+            --pattern "*.whl" --pattern "*.tar.gz" --pattern SHA256SUMS
+          test "$(ls *.whl | wc -l)" = 1
+          test "$(ls *.tar.gz | wc -l)" = 1
+          test -f "fraudurl-${TAG#v}-py3-none-any.whl"
+          test -f "fraudurl-${TAG#v}.tar.gz"
+          diff <(sha256sum *.whl *.tar.gz | sort) <(grep -E '\.(whl|tar\.gz)$' SHA256SUMS | sort)
+          rm SHA256SUMS
+          ls -l
 
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
-      - name: Test, then build the wheel and the sdist
+      - name: Install the wheel in a clean environment and try it
+        env:
+          TAG: ${{ inputs.tag }}
         run: |
-          python -m pip install build "pytest>=7"
-          python -m pytest -q tests
-          python -m build
+          set -euxo pipefail
+          python -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/python" -m pip install --disable-pip-version-check dist/*.whl
+          cd "$RUNNER_TEMP"
+          test "$(venv/bin/fraudurl --version)" = "fraudurl ${TAG#v}"
+          venv/bin/fraudurl --url "http://paypal.com.secure-login.test/webscr/login.php" --quiet | grep '"FRAUD"'
 
       - uses: pypa/gh-action-pypi-publish@release/v1

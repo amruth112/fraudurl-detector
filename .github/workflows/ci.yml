@@ -73,3 +73,33 @@ jobs:
                   sys.exit(got + " differs from " + ref)
           print("package and single file reproduce examples/sample_urls.fraudurl.csv")
           EOF
+
+  package:
+    name: PyPI package and project page
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Build exactly as a release does, PyPI project page included
+        run: |
+          python -m pip install build twine "readme_renderer[md]"
+          python experiments/build_pypi_readme.py --ref "$GITHUB_SHA" -o README.md
+          python experiments/build_pypi_readme.py --check README.md
+          python -m build
+          python -m twine check --strict dist/*
+
+      - name: Install the wheel in a clean environment and try it
+        run: |
+          set -euxo pipefail
+          python -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/python" -m pip install dist/*.whl
+          cd "$RUNNER_TEMP"
+          venv/bin/fraudurl --version
+          venv/bin/fraudurl --url "http://paypal.com.secure-login.test/webscr/login.php" --quiet | grep '"FRAUD"'

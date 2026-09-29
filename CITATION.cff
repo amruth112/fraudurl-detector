@@ -3,8 +3,8 @@ message: "If you use fraudurl in your work, please cite it as below, and cite th
 title: "fraudurl: a fast, offline phishing-URL checker"
 authors:
   - name: "Amruthjithraj V.R"
-version: "1.0.0"
-date-released: "2026-09-28"
+version: "1.0.1"
+date-released: "2026-09-29"
 license: MIT
 repository-code: "https://github.com/amruth112/fraudurl-detector"
 url: "https://amruth112.github.io/fraudurl-detector/"

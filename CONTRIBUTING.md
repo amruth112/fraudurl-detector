@@ -33,6 +33,20 @@ python experiments/check_standalone.py      # CI runs this too
 
 Commit the rebuilt file together with your change.
 
+## Releasing
+
+1. Bump `__version__` in `fraudurl/__init__.py`, then rebuild the single file (see above).
+2. Add a `## [X.Y.Z] - YYYY-MM-DD` section and its link line to `CHANGELOG.md`; the release notes are cut
+   from it. Update `version` and `date-released` in `CITATION.cff` and the title of `MODEL_CARD.md`.
+3. Push to `main` and wait for CI to pass, including the "PyPI package and project page" job.
+4. Push the tag `vX.Y.Z`. `release.yml` tests, builds, creates the GitHub release and starts
+   `publish-pypi.yml`, which uploads those exact files to PyPI through trusted publishing.
+5. If the upload fails, fix the cause and re-run `publish-pypi.yml` from the tag. Never delete or rebuild a
+   release once any of its files is on PyPI: a version can be uploaded only once.
+
+Do not edit `README.md` for PyPI: `experiments/build_pypi_readme.py` rewrites it into the PyPI page at
+release time, with absolute links pinned to the tag.
+
 ## Documentation
 
 `REPORT.md` is generated. Edit `docs/REPORT.template.md` (hand-written text) or `experiments/render_report.py`

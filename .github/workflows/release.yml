@@ -11,32 +11,68 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write          # create the GitHub release
+      actions: write           # start publish-pypi.yml
     steps:
       - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
-      - name: Tag must equal v + fraudurl.__version__
+      - name: Tag must equal v + fraudurl.__version__, with CHANGELOG and CITATION entries
         run: |
           v="v$(python -c 'import fraudurl; print(fraudurl.__version__)')"
           test "$v" = "$GITHUB_REF_NAME" || { echo "tag $GITHUB_REF_NAME != $v"; exit 1; }
+          grep -q "^## \[${v#v}\]" CHANGELOG.md || { echo "CHANGELOG.md has no ${v#v} section"; exit 1; }
+          grep -q "^version: \"${v#v}\"" CITATION.cff || { echo "CITATION.cff version is not ${v#v}"; exit 1; }
 
-      - name: Test, then build the wheel, the sdist and the single-file edition
+      - name: Test
         run: |
-          python -m pip install build "pytest>=7"
+          python -m pip install --disable-pip-version-check build twine "readme_renderer[md]" "pytest>=7"
           python -m pytest -q tests
           python experiments/check_standalone.py
+
+      - name: Build the PyPI project page (links pinned to this tag) and check that every link and image works
+        run: |
+          python experiments/build_pypi_readme.py --ref "$GITHUB_REF_NAME" -o README.md
+          python experiments/build_pypi_readme.py --check README.md --online
+
+      - name: Build the wheel, the sdist and the single-file edition
+        run: |
           python -m build
+          python -m twine check --strict dist/*
           cp fraudurl_standalone.py dist/
           cd dist && sha256sum * > SHA256SUMS
 
-      - name: Create the GitHub release
+      - name: Release notes from CHANGELOG.md
+        run: |
+          python - "$GITHUB_REF_NAME" > "$RUNNER_TEMP/notes.md" <<'EOF'
+          import re, sys
+          v = sys.argv[1][1:]
+          log = open("CHANGELOG.md", encoding="utf-8").read()
+          body = re.search(r"^## \[" + re.escape(v) + r"\][^\n]*\n(.*?)(?=^## \[|^\[)", log, re.S | re.M).group(1)
+          body = re.sub(r"\]\((?!https?:|#)", "](https://github.com/amruth112/fraudurl-detector/blob/v" + v + "/", body)
+          print(body.strip())
+          print(f"\n**Install:** `pip install fraudurl=={v}`, or download `fraudurl_standalone.py` below "
+                "(Python 3.9+, nothing else needed). Verify downloads against `SHA256SUMS`.")
+          EOF
+          cat "$RUNNER_TEMP/notes.md"
+
+      - name: Create the GitHub release (a re-run keeps an existing release and its files)
         env:
           GH_TOKEN: ${{ github.token }}
-        run: >
-          gh release create "$GITHUB_REF_NAME" dist/*
-          --title "fraudurl $GITHUB_REF_NAME"
-          --notes "See CHANGELOG.md for what changed. Verify downloads against SHA256SUMS."
+        run: |
+          if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            echo "release $GITHUB_REF_NAME already exists: keeping its files"
+          else
+            gh release create "$GITHUB_REF_NAME" dist/* --repo "$GITHUB_REPOSITORY" \
+              --title "fraudurl $GITHUB_REF_NAME" --notes-file "$RUNNER_TEMP/notes.md"
+          fi
+
+      - name: Start the PyPI upload of these exact files (publish-pypi.yml)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run publish-pypi.yml --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" -f tag="$GITHUB_REF_NAME"

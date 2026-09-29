@@ -338,12 +338,13 @@ It is a fast **first-line filter** for triage, not a replacement for a full phis
 ## FAQ
 
 **How do I check if a link is phishing?**
-Run `python fraudurl_standalone.py --url "https://example.com/login"`. It prints the verdict, the probability of
-phishing and the reasons, without opening the link.
+Run `fraudurl --url "https://example.com/login"` (installed package) or
+`python fraudurl_standalone.py --url "https://example.com/login"` (single file). It prints the verdict, the
+probability of phishing and the reasons, without opening the link.
 
 **How do I check a list of links for phishing?**
-Put the links in a CSV or text file and run `python fraudurl_standalone.py links.csv`. You get the same file back
-with a verdict, probability and reasons on every row.
+Put the links in a CSV or text file and run `fraudurl links.csv` (or `python fraudurl_standalone.py links.csv`).
+You get the same file back with a verdict, probability and reasons on every row.
 
 **Does it detect malware or other scam links?**
 It is built and tested for phishing URLs: fake login, payment and account pages. It has not been measured on

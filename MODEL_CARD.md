@@ -1,4 +1,4 @@
-# Model card: fraudurl 1.0.0
+# Model card: fraudurl 1.0.1 (same models as 1.0.0)
 
 ## What it is
 
